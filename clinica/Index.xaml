@@ -1,0 +1,489 @@
+﻿<Page x:Class="clinica.Index"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:clinica"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Index">
+    <Page.Resources>
+        <Style x:Key="estiloListBox" TargetType="{x:Type ListBox}">
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="1" Height="105" Background="AliceBlue" CornerRadius="8" Width="150" >
+                            <StackPanel>
+                                <Label FontWeight="Bold" Content="{Binding CodigoLote}" Padding="5,0,5,0" Margin="0,15,0,0" FontSize="14" HorizontalContentAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Estilo:" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Bold"/>
+                                    <Label Content="{Binding Path=NombreEstilo}" HorizontalContentAlignment="Center" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Piezas:" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Bold"/>
+                                    <Label Content="{Binding Path=TotalDePiezas}" HorizontalContentAlignment="Center" FontSize="12"/>
+                                </StackPanel>
+                                <ProgressBar Value="{Binding Path=PiezasTerminadas}" Maximum="{Binding Path=TotalDePiezas}" Height="10" Margin="10,0,10,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="ScrollViewer.HorizontalScrollBarVisibility" 
+                Value="Disabled"/>
+        </Style>
+        <Style x:Key="estiloListBox2" TargetType="{x:Type ListBox}">
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="1" Height="105" Background="AliceBlue" CornerRadius="8" Width="150" >
+                            <StackPanel>
+                                <Label FontWeight="Bold" Content="{Binding CodigoLote}" Padding="5,0,5,0" Margin="0,15,0,0" FontSize="14" HorizontalContentAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Estilo:" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Bold"/>
+                                    <Label Content="{Binding Path=NombreEstilo}" HorizontalContentAlignment="Center" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Piezas:" HorizontalContentAlignment="Center" FontSize="12" FontWeight="Bold"/>
+                                    <Label Content="{Binding Path=TotalDePiezas}" HorizontalContentAlignment="Center" FontSize="12"/>
+                                    <Button x:Name="btnAumentarPiezas" Width="25" Height="25" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                        <Image Source="/imagenes/mas.png"/>
+                                    </Button>
+                                </StackPanel>
+                                <ProgressBar Value="{Binding Path=PiezasTerminadas}" Maximum="{Binding Path=TotalDePiezas}" Height="10" Margin="10,0,10,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="ScrollViewer.HorizontalScrollBarVisibility" 
+                Value="Disabled"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <Grid 
+            x:Name="gridMenu" 
+            Width="200" 
+            HorizontalAlignment="Left" 
+            Margin="-200,0,0,0" 
+            Background="Black" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Viewbox
+                Grid.ColumnSpan="4" 
+                Grid.RowSpan="2" 
+                VerticalAlignment="Top">
+                <Label
+                    Foreground="White" 
+                    Padding="0" 
+                    HorizontalContentAlignment="Center" 
+                    FontSize="25"
+                    FontWeight="Bold"
+                    Margin="15">
+                    ¡Bienvenido!
+                </Label>
+            </Viewbox>
+            <Viewbox
+                Grid.Row="2"
+                Grid.ColumnSpan="4"
+                Grid.RowSpan="3"
+                VerticalAlignment="Top">
+                <Ellipse 
+                    Width="150"
+                    Height="150"
+                    Margin="5">
+                    <Ellipse.Fill>
+                        <ImageBrush 
+                        x:Name="imageUsuario" 
+                        ImageSource="/imagenes/usuario.png"
+                        Stretch="UniformToFill" />
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Viewbox>
+            <Viewbox
+                Grid.Row="4"
+                Grid.Column="4">
+                <Button
+                    x:Name="btnCambiarImagenUsuario"
+                    Width="15"
+                    Height="15"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnCambiarImagenUsuario_Click">
+                    <Image Source="/imagenes/camara.png"/>
+                </Button>
+            </Viewbox>
+            <Viewbox
+                Grid.Row="5"
+                Grid.ColumnSpan="4">
+                <StackPanel
+                    Orientation="Horizontal">
+                    <TextBox
+                        Background="Transparent"
+                        BorderThickness="0"
+                        x:Name="txtNombreUsuario"
+                        IsEnabled="False"
+                        FontSize="10"
+                        Foreground="White"
+                        Margin="5"
+                        Padding="0"
+                        HorizontalAlignment="Center"
+                        Text="usuario"/>
+                    <ToggleButton
+                        x:Name="btnEditarUsuario"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Height="10" Width="10" 
+                        Checked="btnEditarUsuario_Checked" 
+                        Unchecked="btnEditarUsuario_Unchecked" >
+                        <Image Source="/imagenes/editarNombre.png"/>
+                    </ToggleButton>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox
+                Grid.Row="6"
+                Grid.RowSpan="5"
+                Grid.ColumnSpan="4">
+                <StackPanel Margin="5,30,0,0">
+                    <Label 
+                        FontSize="15" 
+                        Foreground="White"
+                        Content="Control de Pacientes"
+                        Margin="0,20,0,0"/>
+                    <Label 
+                        FontSize="15" 
+                        Foreground="White"
+                        Content="► Versión: 1.0"
+                        Margin="0,20,0,0"/>
+                    <Label 
+                        FontSize="15" 
+                        Foreground="White"
+                        Content="► Creado Por:"
+                        Margin="0,20,0,0"/>
+                    <Label 
+                        FontSize="15" 
+                        Foreground="White"
+                        Content="● Rafael Castro"
+                        Margin="20,0,0,0"/>
+                </StackPanel>
+
+            </Viewbox>
+        </Grid>
+        <Grid
+            x:Name="gridAreaTrabajo" >
+            <Grid.Background>
+                <ImageBrush ImageSource="/imagenes/Wallpapers/w1.jpg"/>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Viewbox
+                Grid.Column="8"
+                Grid.RowSpan="1" 
+                Grid.ColumnSpan="2">
+                <StackPanel 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,2,0">
+                    <Label
+                        x:Name="lblHora"
+                        FontSize="15" 
+                        FontWeight="Bold" 
+                        Foreground="White"
+                        Content="00:00:00"
+                        VerticalContentAlignment="Center"
+                        Margin="0,0,5,0">
+                    </Label>
+                    <Button 
+                        x:Name="btnCambiarWallpaper"
+                        Height="25"
+                        Background="Transparent"
+                        BorderBrush="Transparent" Click="btnCambiarWallpaper_Click">
+                        <Image 
+                            Source="/imagenes/cambiarWallpaper.png">
+                        </Image>
+                    </Button>
+                </StackPanel>
+            </Viewbox>
+            <Viewbox 
+                HorizontalAlignment="Left">
+                <ToggleButton 
+                    Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
+                    x:Name="btnMostarMenu"
+                    Height="15"
+                    Width="15"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Checked="btnMostarMenu_Checked" 
+                    Unchecked="btnMostarMenu_Unchecked">
+                    <Image 
+                        x:Name="imgMenu"
+                        Source="/imagenes/Abrirmenu.png">
+                    </Image>
+                </ToggleButton>
+            </Viewbox>
+            <Button
+                x:Name="btnAgregarPaciente"
+                Grid.Row="4"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Grid.RowSpan="7"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnAgregarPaciente_Click">
+                <Viewbox>
+                    <Border
+                        Background="White"
+                        Opacity="0.6"
+                        CornerRadius="8">
+                        <StackPanel>
+                            <Image 
+                                Source="/imagenes/paciente.png"
+                                Width="100"
+                                Height="100"
+                                Margin="2"/>
+                            <Label 
+                                Content="Registrar nuevo paciente" 
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Viewbox>
+            </Button>
+            <Button
+                x:Name="btnRevisarHistorial"
+                Grid.Row="4"
+                Grid.Column="4"
+                Grid.ColumnSpan="3"
+                Grid.RowSpan="7"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Viewbox>
+                    <Border
+                        Background="White"
+                        Opacity="0.6"
+                        CornerRadius="8">
+                        <StackPanel>
+                            <Image 
+                                Source="/imagenes/perfil.png"
+                                Width="100"
+                                Height="100"
+                                Margin="2"/>
+                            <Label 
+                                Content="Consultar historial médico" 
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Viewbox>
+            </Button>
+            <Button
+                x:Name="btnNuevaConsulta"
+                Grid.Row="4"
+                Grid.Column="7"
+                Grid.ColumnSpan="3"
+                Grid.RowSpan="7"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                <Viewbox>
+                    <Border
+                        Background="White"
+                        Opacity="0.6"
+                        CornerRadius="8">
+                        <StackPanel>
+                            <Image 
+                                Source="/imagenes/doctor.png"
+                                Width="100"
+                                Height="100"
+                                Margin="2"/>
+                            <Label 
+                                Content="Registrar nueva Consulta" 
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Viewbox>
+            </Button>
+        </Grid>
+        <Popup 
+            x:Name="popWallpapers"
+            AllowsTransparency="True"
+            StaysOpen="False"
+            Width="700"
+            Height="500"
+            PlacementTarget="{Binding ElementName=gridAreaTrabajo}"
+            Placement="Center">
+            <Border Background="White" BorderBrush="Black" CornerRadius="9">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label 
+                        Grid.ColumnSpan="5" 
+                        Grid.RowSpan="2" 
+                        FontSize="25" 
+                        Content="Escoja el nuevo wallpaper"
+                        HorizontalAlignment="Center"
+                        FontWeight="ExtraBold"/>
+                    <Button
+                        x:Name="btnCerrarPop"
+                        Grid.Column="9"
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                        Width="30"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right" Click="btnCerrarPop_Click">
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/imagenes/cerrar.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button>
+                    <ListBox
+                        x:Name="lstListaWallpapers"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="5"
+                        Grid.RowSpan="7"
+                        Margin="5"
+                        MaxWidth="650"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBoxItem>
+                            <Image Width="150" Height="100" Source="/imagenes/Wallpapers/w0.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="150" Height="100" Source="/imagenes/Wallpapers/w1.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="100" Height="90" Source="/imagenes/Wallpapers/w2.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="150" Height="75" Source="/imagenes/Wallpapers/w3.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="100" Height="78" Source="/imagenes/Wallpapers/w4.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="200" Height="78" Source="/imagenes/Wallpapers/w5.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="100" Height="100" Source="/imagenes/Wallpapers/w6.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="100" Height="100" Source="/imagenes/Wallpapers/w7.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="100" Height="78" Source="/imagenes/Wallpapers/w8.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="200" Height="78" Source="/imagenes/Wallpapers/w9.jpg"/>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Image Width="200" Height="100" Source="/imagenes/Wallpapers/w10.jpg"/>
+                        </ListBoxItem>
+                        <WrapPanel>
+                        </WrapPanel>
+                    </ListBox>
+                    <Button
+                        x:Name="btnSeleccionarWallpaper"
+                        Background="Transparent" 
+                        BorderBrush="Transparent"
+                        Grid.Row="9" 
+                        Grid.Column="9"
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnSeleccionarWallpaper_Click">
+                        <Border CornerRadius="9" Background="DarkBlue">
+                            <Label Content="Seleccionar" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                    </Button>
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</Page>
