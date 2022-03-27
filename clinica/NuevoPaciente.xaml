@@ -64,13 +64,13 @@
             Grid.Column="1" 
             Grid.ColumnSpan="15" 
             Grid.RowSpan="2">
-            <Label Content="Registrar nuevo paciente" FontWeight="Bold"/>
+            <Label Content="Control de pacientes" FontWeight="Bold"/>
         </Viewbox>
         <Border 
             BorderBrush="Black" 
             BorderThickness="4"
             Grid.Row="3"
-            Grid.Column="4" 
+            Grid.Column="6" 
             Grid.ColumnSpan="8" 
             Grid.RowSpan="15"
             CornerRadius="8">
@@ -159,17 +159,86 @@
                             MaxLength="65"/>
                     </StackPanel>
                     <Button 
+                        x:Name="btnGuardar"
                         Height="20"
                         Width="75" 
                         Margin="10" 
                         Background="Transparent" 
                         BorderBrush="Transparent"
-                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                        Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnGuardar_Click">
                         <Image 
                             Source="imagenes\guardar.png"/>
                     </Button>
                 </StackPanel>
    
+            </Viewbox>
+        </Border>
+        <Border 
+            BorderBrush="Black" 
+            BorderThickness="4"
+            Grid.Row="3"
+            Grid.Column="1" 
+            Grid.ColumnSpan="4" 
+            Grid.RowSpan="15"
+            CornerRadius="8"
+            VerticalAlignment="Top">
+            <Viewbox>
+                <StackPanel>
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Top"
+                        Margin="10">
+                        <Label 
+                            Content="Buscar paciente:" 
+                            Height="25"
+                            FontSize="10" 
+                            Width="100" 
+                            FontWeight="Bold"/>
+                        <TextBox 
+                            x:Name="txtBuscar" 
+                            FontSize="7" 
+                            Height="15" 
+                            Width="100" 
+                            VerticalContentAlignment="Center" 
+                            MaxLength="65"/>
+                        <Button
+                            Height="15"
+                            Width="25">
+                            <Image Source="/imagenes/lupa.png"/>
+                        </Button>
+                    </StackPanel>
+                    <ListView
+                        Height="500"
+                        Width="325"
+                        Margin="10">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Header="Nombre"
+                                    Width="220">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label
+                                                Width="150"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn
+                                    Header="DUI"
+                                    Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label
+                                                Width="100"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                </StackPanel>
+
             </Viewbox>
         </Border>
     </Grid>

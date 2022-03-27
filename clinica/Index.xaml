@@ -224,6 +224,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -243,7 +245,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Viewbox
-                Grid.Column="8"
+                Grid.Column="10"
                 Grid.RowSpan="1" 
                 Grid.ColumnSpan="2">
                 <StackPanel 
@@ -290,9 +292,10 @@
             <Button
                 x:Name="btnAgregarPaciente"
                 Grid.Row="4"
-                Grid.Column="1"
+                Grid.Column="0"
                 Grid.ColumnSpan="3"
                 Grid.RowSpan="7"
+                Margin="5,0,5,0"
                 Background="Transparent"
                 BorderBrush="Transparent"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnAgregarPaciente_Click">
@@ -318,9 +321,10 @@
             <Button
                 x:Name="btnRevisarHistorial"
                 Grid.Row="4"
-                Grid.Column="4"
+                Grid.Column="3"
                 Grid.ColumnSpan="3"
                 Grid.RowSpan="7"
+                Margin="5,0,5,0"
                 Background="Transparent"
                 BorderBrush="Transparent"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
@@ -333,7 +337,7 @@
                             <Image 
                                 Source="/imagenes/perfil.png"
                                 Width="100"
-                                Height="100"
+                                Height="105"
                                 Margin="2"/>
                             <Label 
                                 Content="Consultar historial médico" 
@@ -346,12 +350,13 @@
             <Button
                 x:Name="btnNuevaConsulta"
                 Grid.Row="4"
-                Grid.Column="7"
+                Grid.Column="6"
                 Grid.ColumnSpan="3"
                 Grid.RowSpan="7"
+                Margin="5,0,5,0"
                 Background="Transparent"
                 BorderBrush="Transparent"
-                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnNuevaConsulta_Click">
                 <Viewbox>
                     <Border
                         Background="White"
@@ -371,6 +376,25 @@
                     </Border>
                 </Viewbox>
             </Button>
+            <Border 
+                Grid.Column="9"
+                Grid.ColumnSpan="3"
+                Grid.Row="2"
+                Grid.RowSpan="12"
+                BorderThickness="4"
+                Margin="10"
+                BorderBrush="White"
+                Background="White"
+                CornerRadius="8"
+                Opacity="0.6">
+                <StackPanel>
+                    <Label 
+                        Content="Actividades Pendientes"
+                        FontSize="17"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
         </Grid>
         <Popup 
             x:Name="popWallpapers"

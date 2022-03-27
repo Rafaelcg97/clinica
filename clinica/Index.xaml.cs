@@ -112,5 +112,10 @@ namespace clinica
         {
             this.NavigationService.Navigate(new NuevoPaciente());
         }
+
+        private void btnNuevaConsulta_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new NuevaConsulta());
+        }
     }
 }

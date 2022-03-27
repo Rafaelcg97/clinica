@@ -15,9 +15,9 @@ using System.Windows.Shapes;
 
 namespace clinica
 {
-    public partial class NuevoPaciente : Page
+    public partial class NuevaConsulta : Page
     {
-        public NuevoPaciente()
+        public NuevaConsulta()
         {
             InitializeComponent();
         }
@@ -25,11 +25,6 @@ namespace clinica
         private void btnAtras_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
-        }
-
-        private void btnGuardar_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
