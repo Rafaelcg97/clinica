@@ -58,5 +58,16 @@ namespace clinica.Properties {
                 this["foto"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=LAPTOP-03J5ARV5\\SQLEXPRESS;Initial Catalog=clinica;Persist Security I" +
+            "nfo=True;User ID=clinicaUser;Password=clinica1234")]
+        public string clinica {
+            get {
+                return ((string)(this["clinica"]));
+            }
+        }
     }
 }
