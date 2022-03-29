@@ -75,6 +75,8 @@ namespace clinica
                         MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+
+                NavigationService.Navigate(new Index());
             }
         }
 
@@ -88,7 +90,66 @@ namespace clinica
                 mskDocumento.Text = itemSeleccionado.Dui;
                 mskTelefono.Text = itemSeleccionado.Telefono;
                 txtCorreo.Text = itemSeleccionado.Correo;
+                dpFecha.SelectedDate= Convert.ToDateTime(itemSeleccionado.FechaNacimiento);
+            }
+        }
 
+        private void btnLimpiar_Click(object sender, RoutedEventArgs e)
+        {
+            txtId.Text = "0";
+            txtNombre.Clear();
+            mskDocumento.Clear();
+            mskTelefono.Clear();
+            txtCorreo.Clear();
+
+        }
+
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            lstPacientes.Items.Clear();
+            if (string.IsNullOrEmpty(txtBuscar.Text))
+            {
+                string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes]";
+
+                using (SqlConnection cn = conexioSQL.Clinica())
+                {
+                    try
+                    {
+                        SqlCommand cm = new SqlCommand(sql, cn);
+                        SqlDataReader dr = cm.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                        }
+                        dr.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                string sql = "SELECT [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] WHERE nombrePaciente LIKE'%"+txtBuscar.Text+"%'";
+
+                using (SqlConnection cn = conexioSQL.Clinica())
+                {
+                    try
+                    {
+                        SqlCommand cm = new SqlCommand(sql, cn);
+                        SqlDataReader dr = cm.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                        }
+                        dr.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
     }

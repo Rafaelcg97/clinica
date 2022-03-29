@@ -1,6 +1,8 @@
-﻿using Microsoft.Win32;
+﻿using clinica.clases;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,6 +43,26 @@ namespace clinica
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
+
+            string sql = "SELECT idConsulta, textAviso FROM avisos WHERE fechaAviso='"+DateTime.Now.ToString("yyyy-MM-dd")+"';";
+
+            using (SqlConnection cn = conexioSQL.Clinica())
+            {
+                try
+                {
+                    SqlCommand cm = new SqlCommand(sql, cn);
+                    SqlDataReader dr = cm.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        lstAvisos.Items.Add(new aviso(Convert.ToInt32(dr["idConsulta"]), dr["textAviso"].ToString()));
+                    }
+                    dr.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
         #region accionesMenuLateral
         private void btnCambiarImagenUsuario_Click(object sender, RoutedEventArgs e)

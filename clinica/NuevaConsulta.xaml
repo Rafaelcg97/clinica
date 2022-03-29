@@ -8,7 +8,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="NuevaConsulta">
 
-    <Grid>
+    <Grid x:Name="gridAreaDeTrabajo">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -97,9 +97,9 @@
                         Margin="5,0,0,0"/>
                 </Border>
                 <Button
-                    x:Name="btnBuscarPaciente"
+                    x:Name="btnAbrirBuscarPaciente"
                     Width="80"
-                    Height="25">
+                    Height="25" Click="btnBuscarPaciente_Click">
                     <Image Source="/imagenes/lupa.png"/>
                 </Button>
                 <Label 
@@ -179,10 +179,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="G:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtG"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -196,9 +198,11 @@
                                 VerticalContentAlignment="Center"
                                 Content="PV:"/>
                             <TextBox
+                                x:Name="txtPV"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -211,10 +215,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="PC:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtPC"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -227,10 +233,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="PP:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtPP"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -243,10 +251,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="AB:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtAB"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -259,10 +269,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="v:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtV"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel
@@ -280,10 +292,11 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="P:"/>
-                            <TextBox
+                            <TextBox x:Name="txtP"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -296,7 +309,8 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="FUR:"/>
-                            <TextBox
+                            <TextBox 
+                                x:Name="txtFUR"
                                 Width="125"
                                 FontSize="12"
                                 FontWeight="Normal"/>
@@ -312,7 +326,7 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="FPP:"/>
-                            <TextBox
+                            <TextBox x:Name="txtFPP"
                                 Width="125"
                                 FontSize="12"
                                 FontWeight="Normal"/>
@@ -328,10 +342,11 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="Talla:"/>
-                            <TextBox
+                            <TextBox x:Name="txtTalla"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -344,7 +359,7 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="Peso:"/>
-                            <TextBox
+                            <TextBox x:Name="txtPeso"
                                 Width="125"
                                 FontSize="12"
                                 FontWeight="Normal"/>
@@ -521,7 +536,7 @@
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     FontWeight="Bold"/>
-                <DatePicker
+                <DatePicker x:Name="dtpFecha"
                     Height="22"
                     Width="200"/>
             </StackPanel>
@@ -531,7 +546,7 @@
             Grid.RowSpan="4"
             Grid.ColumnSpan="5"
             Grid.Column="11">
-            <TextBox
+            <TextBox x:Name="txtAviso"
                 FontSize="25"
                 Margin="10"
                 Height="200"
@@ -541,8 +556,94 @@
             x:Name="btnGuardar"
             Grid.Row="18"
             Grid.Column="12"
-            Grid.ColumnSpan="3">
+            Grid.ColumnSpan="3" Click="btnGuardar_Click">
             Guardar Consulta
         </Button>
+        <Popup 
+            x:Name="popUpPaciente"
+            Height="300" 
+            Width="400" 
+            StaysOpen="False" 
+            PlacementTarget="{Binding ElementName=gridAreaDeTrabajo}" 
+            Placement="Center" 
+            AllowsTransparency="True">
+            <Border
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                CornerRadius="8">
+                <StackPanel>
+                    <Label Content="Buscar Paciente"
+                           FontSize="15"
+                           FontWeight="Bold"
+                           Width="400"
+                           HorizontalContentAlignment="Center"/>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <Label
+                            Margin="5,0,0,0"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Content="Nombre:"/>
+                        <TextBox
+                            x:Name="txtBuscar"
+                            Width="250"
+                            Height="18"/>
+                        <Button
+                            x:Name="btnBuscarPaciente"
+                            Width="25"
+                            Height="18"
+                            Click="btnBuscar_Click"                            >
+                            <Image Source="/imagenes/lupa.png"/>
+                        </Button>
+                    </StackPanel>
+                    <ListView
+                        x:Name="lstPacientes"
+                        Margin="5"
+                        Height="175"
+                        SelectionMode="Single">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn
+                                    Header="ID"
+                                    Width="65">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Id}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn
+                                    Header="Nombre"
+                                    Width="200">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Nombre}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn
+                                    Header="DUI"
+                                    Width="135">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Dui}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Button
+                        x:Name="btnSeleccionarPaciente"
+                        Height="30"
+                        Width="100"
+                        HorizontalAlignment="Center" Click="btnSeleccionarPaciente_Click">
+                        Seleccionar
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Popup>
+        
     </Grid>
 </Page>

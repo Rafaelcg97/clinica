@@ -393,6 +393,20 @@
                         FontSize="17"
                         FontWeight="Bold"
                         HorizontalAlignment="Center"/>
+                    <ListView
+                        x:Name="lstAvisos">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Notificacion}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </StackPanel>
             </Border>
         </Grid>

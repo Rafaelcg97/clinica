@@ -89,11 +89,18 @@
                             x:Name="txtId" 
                             FontSize="7" 
                             Height="15" 
-                            Width="100"
+                            Width="75"
                             VerticalContentAlignment="Center"
                             MaxLength="65"
                             IsEnabled="False"
                             Text="0"/>
+                        <Button
+                            x:Name="btnLimpiar"
+                            Height="15"
+                            Width="25"
+                            Background="Transparent" Click="btnLimpiar_Click">
+                            <Image Source="/imagenes/limpiar.png"/>
+                        </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10">
                         <Label 
@@ -220,8 +227,9 @@
                             VerticalContentAlignment="Center" 
                             MaxLength="65"/>
                         <Button
+                            x:Name="btnBuscar"
                             Height="15"
-                            Width="25">
+                            Width="25" Click="btnBuscar_Click">
                             <Image Source="/imagenes/lupa.png"/>
                         </Button>
                     </StackPanel>
@@ -229,8 +237,7 @@
                         x:Name="lstPacientes"
                         Height="500"
                         Width="325"
-                        Margin="10" SelectionChanged="lstPacientes_SelectionChanged"
-                        >
+                        Margin="10" SelectionChanged="lstPacientes_SelectionChanged">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn
@@ -261,9 +268,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-
                 </StackPanel>
-
             </Viewbox>
         </Border>
     </Grid>
