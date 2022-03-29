@@ -313,7 +313,8 @@
                                 x:Name="txtFUR"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                MaxLength="9"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -326,10 +327,12 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="FPP:"/>
-                            <TextBox x:Name="txtFPP"
+                            <TextBox 
+                                x:Name="txtFPP"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal"
+                                MaxLength="9"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -346,7 +349,7 @@
                                 Width="125"
                                 FontSize="12"
                                 FontWeight="Normal"
-                                KeyDown="soloNumerosDecimales"/>
+                                KeyDown="soloNumerosDecimales" TextChanged="txtTalla_TextChanged"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -362,7 +365,7 @@
                             <TextBox x:Name="txtPeso"
                                 Width="125"
                                 FontSize="12"
-                                FontWeight="Normal"/>
+                                FontWeight="Normal" TextChanged="txtTalla_TextChanged"/>
                         </StackPanel>
                         <StackPanel
                             Orientation="Horizontal"
@@ -375,7 +378,7 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="IMC:"/>
-                            <TextBox
+                            <TextBox x:Name="txtblImc"
                                 Width="125"
                                 FontSize="12"
                                 FontWeight="Normal"
@@ -546,11 +549,13 @@
             Grid.RowSpan="4"
             Grid.ColumnSpan="5"
             Grid.Column="11">
-            <TextBox x:Name="txtAviso"
+            <TextBox 
+                x:Name="txtAviso"
                 FontSize="25"
                 Margin="10"
                 Height="200"
-                Width="700"/>
+                Width="700"
+                TextWrapping="Wrap"/>
         </Viewbox>
         <Button
             x:Name="btnGuardar"
@@ -644,6 +649,5 @@
                 </StackPanel>
             </Border>
         </Popup>
-        
     </Grid>
 </Page>

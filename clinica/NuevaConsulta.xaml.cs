@@ -1,19 +1,10 @@
 ﻿using clinica.clases;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace clinica
 {
@@ -215,6 +206,24 @@ namespace clinica
             {
                 MessageBox.Show("Seleccione un paciente");
             }
+        }
+
+        private string generarImc()
+        {
+            string imc = "---";
+            double n;
+            bool result = double.TryParse(txtTalla.Text, out n) && double.TryParse(txtPeso.Text, out n);
+            if (result)
+            {
+                imc = ((Convert.ToDouble(txtPeso.Text) / 2.2) / Math.Pow(Convert.ToDouble(txtTalla.Text), 2)).ToString();
+            }
+
+            return imc;
+        }
+
+        private void txtTalla_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            txtblImc.Text = generarImc();
         }
     }
 }

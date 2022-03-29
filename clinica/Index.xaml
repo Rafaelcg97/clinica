@@ -327,7 +327,7 @@
                 Margin="5,0,5,0"
                 Background="Transparent"
                 BorderBrush="Transparent"
-                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnRevisarHistorial_Click">
                 <Viewbox>
                     <Border
                         Background="White"
@@ -400,7 +400,10 @@
                                 <GridViewColumn>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Label Content="{Binding Notificacion}"/>
+                                            <TextBlock 
+                                                Text="{Binding Notificacion}" 
+                                                TextWrapping="Wrap"
+                                                Width="250"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

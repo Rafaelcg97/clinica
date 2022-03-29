@@ -1,19 +1,9 @@
 ﻿using clinica.clases;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace clinica
 {
@@ -22,7 +12,7 @@ namespace clinica
         public NuevoPaciente()
         {
             InitializeComponent();
-            string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes]";
+            string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] ORDER BY IdPaciente DESC";
 
             using (SqlConnection cn = conexioSQL.Clinica())
             {
@@ -109,7 +99,7 @@ namespace clinica
             lstPacientes.Items.Clear();
             if (string.IsNullOrEmpty(txtBuscar.Text))
             {
-                string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes]";
+                string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] ORDER BY IdPaciente DESC";
 
                 using (SqlConnection cn = conexioSQL.Clinica())
                 {
