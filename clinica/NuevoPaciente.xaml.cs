@@ -1,6 +1,8 @@
 ﻿using clinica.clases;
 using System;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -12,6 +14,9 @@ namespace clinica
         public NuevoPaciente()
         {
             InitializeComponent();
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+            Thread.CurrentThread.CurrentCulture = ci;
             string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] ORDER BY IdPaciente DESC";
 
             using (SqlConnection cn = conexioSQL.Clinica())

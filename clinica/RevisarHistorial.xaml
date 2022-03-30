@@ -162,7 +162,7 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
-                        Header="Exaemenes"
+                        Header="Historia clinica"
                         Width="200">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -180,7 +180,7 @@
                                     Width="95" 
                                     GotFocus="Button_GotFocus"
                                     Click="btnAntedentes_Click">
-                                    Antecedentes
+                                    Detalles
                                 </Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -336,7 +336,7 @@
                             Margin="0,0,5,0"
                             FontSize="15"
                             FontWeight="Bold"
-                            Content="P:"
+                            Content="P/A:"
                             Width="100"/>
                         <TextBlock
                             x:Name="lblp"

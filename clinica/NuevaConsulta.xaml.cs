@@ -1,6 +1,8 @@
 ﻿using clinica.clases;
 using System;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,9 +12,13 @@ namespace clinica
 {
     public partial class NuevaConsulta : Page
     {
+
         public NuevaConsulta()
         {
             InitializeComponent();
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+            Thread.CurrentThread.CurrentCulture = ci;
         }
 
         private void btnAtras_Click(object sender, RoutedEventArgs e)
@@ -175,7 +181,7 @@ namespace clinica
                     try
                     {
                         string sql2 = "INSERT INTO antecedentes(idPaciente, idConsultas, personalesAntecedentes, familiaresAntecedentes, gAntecedentes, pvAntecedentes, pcAntecendentes, ppAntecendentes, abAntecendentes, vAntecendentes, pAntecendentes, furAntecedentes, fppAntecedentes, TallaAntecedentes, PesoAntecedentes)" +
-                                        " VALUES('" + lblId.Content + "','" + idSolicitud + "','" + txtPersonales.Text + "','" + txtFamiliares.Text + "','" + txtG.Text + "','" + txtPV.Text + "','" + txtPC.Text + "','" + txtPP.Text + "','" + txtAB.Text + "','" + txtV.Text + "','" + txtP.Text + "','" + txtFUR.Text + "','" + txtFPP.Text + "', '" + txtTalla.Text + "', '" + txtPeso.Text + "');";
+                                        " VALUES('" + lblId.Content + "','" + idSolicitud + "','" + txtPersonales.Text + "','" + txtFamiliares.Text + "','" + txtG.Text + "','" + txtPV.Text + "','" + txtPC.Text + "','" + txtPP.Text + "','" + txtAB.Text + "','" + txtV.Text + "','" + txtP.Text + "','" + Convert.ToDateTime(dtpFUR.SelectedDate).ToString("yyyy-MM-dd") + "','" + txtFPP.Text + "', '" + txtTalla.Text + "', '" + txtPeso.Text + "');";
                         SqlCommand cm = new SqlCommand(sql2, cn);
                         cm.ExecuteNonQuery();
                     }
@@ -224,6 +230,16 @@ namespace clinica
         private void txtTalla_TextChanged(object sender, TextChangedEventArgs e)
         {
             txtblImc.Text = generarImc();
+        }
+
+        private void dtpFUR_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int dia = (Convert.ToDateTime(dtpFUR.SelectedDate).AddDays(7)).Day;
+            int mes = (Convert.ToDateTime(dtpFUR.SelectedDate).AddMonths(9)).Month;
+            int anio = (Convert.ToDateTime(dtpFUR.SelectedDate).AddMonths(9)).Year;
+
+            txtFPP.Text = anio.ToString("0000")+ "-" + mes.ToString("00") + "-" + dia.ToString("00");
+
         }
     }
 }
