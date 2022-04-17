@@ -97,6 +97,18 @@
                     Click="btnBuscarPaciente_Click">
                     <Image Source="/imagenes/lupa.png"/>
                 </Button>
+                <Button
+                    x:Name="btnDescargar"
+                    Width="80"
+                    Height="25" Click="btnDescargar_Click" >
+                    <Image Source="/imagenes/archivo.png"/>
+                </Button>
+                <Button
+                    x:Name="btnPDF"
+                    Width="80"
+                    Height="25" Click="btnPDF_Click">
+                    <Image Source="/imagenes/pdf.png"/>
+                </Button>
             </StackPanel>
         </Viewbox>
         <ListView
@@ -108,8 +120,17 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn
+                        Header="Selec"
+                        Width="35">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Seleccionado}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
                         Header="Fecha Consulta"
-                        Width="150">
+                        Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Label Content="{Binding Fecha}"/>
@@ -118,7 +139,7 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Header="Nombre paciente"
-                        Width="300">
+                        Width="220">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Label Content="{Binding Nombre}"/>
@@ -126,8 +147,17 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn
+                        Header="Edad"
+                        Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Edad}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
                         Header="DUI"
-                        Width="150">
+                        Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Dui}" TextWrapping="Wrap" Width="150"/>
@@ -136,7 +166,7 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Header="Motivo Consulta"
-                        Width="200">
+                        Width="180">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Motivo}" TextWrapping="Wrap" Width="150"/>
@@ -145,7 +175,7 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Header="Diagnostico"
-                        Width="200">
+                        Width="180">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Diagnostico}" TextWrapping="Wrap" Width="150"/>
@@ -172,15 +202,48 @@
                     </GridViewColumn>
                     <GridViewColumn
                         Header="Antecedentes"
-                        Width="100">
+                        Width="70">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Button 
                                     x:Name="btnAntedentes"
-                                    Width="95" 
+                                    Width="50" 
                                     GotFocus="Button_GotFocus"
-                                    Click="btnAntedentes_Click">
-                                    Detalles
+                                    Click="btnAntedentes_Click"
+                                    FontSize="10">
+                                    Ver
+                                </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Header="Fisicos"
+                        Width="70">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button 
+                                    x:Name="btnFisicos"
+                                    Width="50" 
+                                    GotFocus="Button_GotFocus"
+                                    Click="btnFisicos_Click"
+                                    FontSize="10">
+                                    Ver
+                                </Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn
+                        Header="Obstetricos"
+                        Width="70">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button 
+                                    x:Name="btnObstetricos"
+                                    Width="50" 
+                                    GotFocus="Button_GotFocus"
+                                    Click="btnObstetricos_Click"
+                                    FontSize="10">
+                                    Ver
                                 </Button>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -212,12 +275,12 @@
                             Width="100"/>
                         <TextBlock
                             x:Name="lblFamiliares"
-                            FontSize="8"
+                            FontSize="12"
                             FontWeight="SemiBold"
                             Text="----"
                             TextWrapping="Wrap"
                             Width="250"
-                            Height="70"/>
+                            Height="200"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label
@@ -228,12 +291,28 @@
                             Width="100"/>
                         <TextBlock
                             x:Name="lblPersonales"
-                            FontSize="8"
+                            FontSize="12"
                             FontWeight="SemiBold"
                             Text="----"
                             TextWrapping="Wrap"
                             Width="250"
-                            Height="70"/>
+                            Height="200"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="FUR:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblfur"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="200"
+                            Height="50"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label
@@ -320,7 +399,7 @@
                             Margin="0,0,5,0"
                             FontSize="15"
                             FontWeight="Bold"
-                            Content="V:"
+                            Content="NV:"
                             Width="100"/>
                         <TextBlock
                             x:Name="lblv"
@@ -331,6 +410,24 @@
                             Width="200"
                             Height="50"/>
                     </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+        <Popup 
+            x:Name="popUpFisicos"
+            Height="500" 
+            Width="400" 
+            StaysOpen="False" 
+            PlacementTarget="{Binding ElementName=gridAreaDeTrabajo}" 
+            Placement="Center" 
+            AllowsTransparency="True">
+            <Border
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                CornerRadius="8">
+                <StackPanel
+                    Margin="5,5,5,5">
                     <StackPanel Orientation="Horizontal">
                         <Label
                             Margin="0,0,5,0"
@@ -340,38 +437,6 @@
                             Width="100"/>
                         <TextBlock
                             x:Name="lblp"
-                            FontSize="15"
-                            FontWeight="SemiBold"
-                            Text="----"
-                            TextWrapping="Wrap"
-                            Width="200"
-                            Height="50"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label
-                            Margin="0,0,5,0"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Content="FUR:"
-                            Width="100"/>
-                        <TextBlock
-                            x:Name="lblfur"
-                            FontSize="15"
-                            FontWeight="SemiBold"
-                            Text="----"
-                            TextWrapping="Wrap"
-                            Width="200"
-                            Height="50"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label
-                            Margin="0,0,5,0"
-                            FontSize="15"
-                            FontWeight="Bold"
-                            Content="FPP:"
-                            Width="100"/>
-                        <TextBlock
-                            x:Name="lblfpp"
                             FontSize="15"
                             FontWeight="SemiBold"
                             Text="----"
@@ -427,7 +492,827 @@
                             Width="200"
                             Height="50"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="Hallazgos:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblHallazgos"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="200"
+                            Height="200"/>
+                    </StackPanel>
                 </StackPanel>
+            </Border>
+        </Popup>
+        <Popup 
+            x:Name="popObstetricos"
+            Height="750" 
+            Width="400" 
+            StaysOpen="False" 
+            PlacementTarget="{Binding ElementName=gridAreaDeTrabajo}" 
+            Placement="Center" 
+            AllowsTransparency="True">
+            <Border
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                CornerRadius="8">
+                <StackPanel
+                    Margin="5,5,5,5">
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="FPP:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblFPP"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="EG:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblEG"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="AU:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblAU"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="Presentación:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblPresent"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="FCF:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblFCF"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="MF:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblMF"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="RH:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblRH"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="HB:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblHB"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="VIH:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblVIH"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="VDLR:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblVDLR"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="EGO:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblEGO"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="URO:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblURO"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="GLC:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblGLC"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="O'S:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblOS"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label
+                            Margin="0,0,5,0"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Content="USG:"
+                            Width="100"/>
+                        <TextBlock
+                            x:Name="lblUSG"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Text="----"
+                            TextWrapping="Wrap"
+                            Width="250"
+                            Height="50"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+        <Popup 
+            x:Name="popPDF"
+            Height="700" 
+            Width="620" 
+            StaysOpen="False" 
+            PlacementTarget="{Binding ElementName=gridAreaDeTrabajo}" 
+            Placement="Center" 
+            AllowsTransparency="True">
+            <Border
+                Background="White"
+                BorderBrush="Black"
+                BorderThickness="2"
+                CornerRadius="8">
+                <StackPanel>
+                    <ScrollViewer
+                        x:Name="scroll"
+                        Height="600">
+                        <StackPanel
+                        x:Name="areaImpresion"
+                        Width="590"
+                        ScrollViewer.CanContentScroll="True">
+                            <Label
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="#FF1A4F7D"
+                            Padding="0"
+                            HorizontalAlignment="Center">
+                                Clinicas TEO 7-7
+                            </Label>
+                            <Label
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="#FF1A4F7D"
+                            Padding="0"
+                            HorizontalAlignment="Center">
+                                HOJA DE CONTROL PRENATAL
+                            </Label>
+                            <TextBlock
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Padding="0"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Left"
+                            TextDecorations="Underline"
+                            Foreground="#FF2D5216">
+                            DATOS GENERALES:
+                            </TextBlock>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,5,0,0">
+                                <Label
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    NOMBRE:
+                                </Label>
+                                <Label
+                                x:Name="lblNombre"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="300">
+                                    ___
+                                </Label>
+                                <Label
+                                Margin="5,0,0,0"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    EDAD:
+                                </Label>
+                                <Label
+                                x:Name="lblEdad"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="100">
+                                    ---
+                                </Label>
+                            </StackPanel>
+                            <TextBlock
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Padding="0"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Left"
+                            TextDecorations="Underline"
+                            Foreground="#FF2D5216">
+                            ANTECEDENTES:
+                            </TextBlock>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                                <TextBlock
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                TextDecorations="Underline">
+                                OBSTÉTRICOS:
+                                </TextBlock>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    FUR:
+                                </Label>
+                                <Label
+                                x:Name="lblFUR"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="80">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    FPP:
+                                </Label>
+                                <Label
+                                x:Name="lblImpFPP"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="80">
+                                    ---
+                                </Label>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                                <TextBlock
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                TextDecorations="Underline">
+                                FORMULA OBSTÉTRICA:
+                                </TextBlock>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    G:
+                                </Label>
+                                <Label
+                                x:Name="lblImpG"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    PV:
+                                </Label>
+                                <Label
+                                x:Name="lblImpPV"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    PC:
+                                </Label>
+                                <Label
+                                x:Name="lblImpPC"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    PP:
+                                </Label>
+                                <Label
+                                x:Name="lblImpPP"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    AB:
+                                </Label>
+                                <Label
+                                x:Name="lblImpAB"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="10,0,0,0"
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    NV:
+                                </Label>
+                                <Label
+                                x:Name="lblImpNV"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="25">
+                                    ---
+                                </Label>
+    
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                                <TextBlock
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                TextDecorations="Underline">
+                                FAMILIARES:
+                                </TextBlock>
+                                <TextBlock
+                                x:Name="lblImpFamiliares"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="500"
+                                TextWrapping="Wrap">
+                                ---
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,10,0,0">
+                                <TextBlock
+                                FontSize="13"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                TextDecorations="Underline">
+                                PERSONALES:
+                                </TextBlock>
+                                <TextBlock
+                                x:Name="lblImpPersonales"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="500"
+                                TextWrapping="Wrap">
+                                ---
+                                </TextBlock>
+                            </StackPanel>
+                            <TextBlock
+                            FontSize="15"
+                            FontWeight="Bold"
+                            Padding="0"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Left"
+                            TextDecorations="Underline"
+                            Foreground="#FF2D5216">
+                            EXAMEN FÍSICO:
+                            </TextBlock>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,5,0,0">
+                                <Label
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    PESO:
+                                </Label>
+                                <Label
+                                x:Name="lblImpPeso"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="50">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="5,0,0,0"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    TALLA:
+                                </Label>
+                                <Label
+                                x:Name="lblImpTalla"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="50">
+                                    ---
+                                </Label>
+                                <Label
+                                Margin="5,0,0,0"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                Padding="0"
+                                HorizontalAlignment="Center">
+                                    IMC:
+                                </Label>
+                                <Label
+                                x:Name="lblImpImc"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                Padding="0"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Center"
+                                Width="50">
+                                    ---
+                                </Label>
+                            </StackPanel>
+                            <DataGrid 
+                                IsReadOnly="True"
+                            x:Name="dgExamenFisico" 
+                            AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn 
+                                    Header="FECHA" 
+                                    Width="73"
+                                    Binding="{Binding Fecha}" />
+                                    <DataGridTextColumn 
+                                    Width="73"
+                                    Header="PESO" 
+                                    Binding="{Binding Peso}" />
+                                    <DataGridTextColumn 
+                                    Width="70"
+                                    Header="EG" 
+                                    Binding="{Binding Eg}" />
+                                    <DataGridTextColumn 
+                                    Width="70"
+                                    Header="P/A" 
+                                    Binding="{Binding P}" />
+                                    <DataGridTextColumn 
+                                    Width="73"
+                                    Header="AU" 
+                                    Binding="{Binding Au}" />
+                                    <DataGridTextColumn 
+                                    Width="73"
+                                    Header="PRESENTACION" 
+                                    Binding="{Binding Presentacion}" />
+                                    <DataGridTextColumn
+                                    Width="73"
+                                    Header="FCF" 
+                                    Binding="{Binding Fcf}" />
+                                    <DataGridTextColumn
+                                    Width="73"
+                                    Header="MF" 
+                                    Binding="{Binding Mf}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Label
+                                Margin="0,10,0,0"
+                                Padding="0"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                Foreground="#FF0B2196">
+                                Primer Perfil
+                            </Label>
+                            <DataGrid 
+                                IsReadOnly="True"
+                                x:Name="dgPrimerPerfil" 
+                                AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="RH" 
+                                        Binding="{Binding Rh}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="HB" 
+                                        Binding="{Binding Hb}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="VIH" 
+                                        Binding="{Binding Vih}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="VDLR" 
+                                        Binding="{Binding Vdlr}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="EGO" 
+                                        Binding="{Binding Ego}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="URO" 
+                                        Binding="{Binding Uro}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="GLUCOSA" 
+                                        Binding="{Binding Glc}" />
+                                    <DataGridTextColumn
+                                        Width="65"
+                                        Header="O'S" 
+                                        Binding="{Binding Os}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="USG" 
+                                        Binding="{Binding Usg}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Label
+                                Margin="0,10,0,0"
+                                Padding="0"
+                                FontSize="15"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                Foreground="#FF0B2196">
+                                Segundo Perfil
+                            </Label>
+                            <DataGrid 
+                                IsReadOnly="True"
+                                x:Name="dgSegundoPerfil" 
+                                AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="RH" 
+                                        Binding="{Binding Rh}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="HB" 
+                                        Binding="{Binding Hb}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="VIH" 
+                                        Binding="{Binding Vih}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="VDLR" 
+                                        Binding="{Binding Vdlr}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="EGO" 
+                                        Binding="{Binding Ego}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="URO" 
+                                        Binding="{Binding Uro}" />
+                                    <DataGridTextColumn 
+                                        Width="64"
+                                        Header="GLUCOSA" 
+                                        Binding="{Binding Glc}" />
+                                    <DataGridTextColumn
+                                        Width="65"
+                                        Header="O'S" 
+                                        Binding="{Binding Os}" />
+                                    <DataGridTextColumn 
+                                        Width="65"
+                                        Header="USG" 
+                                        Binding="{Binding Usg}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock
+                            FontWeight="Bold"
+                            FontSize="15"
+                            TextWrapping="Wrap"
+                            Text="Otros Examenes: _____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"/>
+                            <TextBlock
+                            FontWeight="Bold"
+                            FontSize="15"
+                            TextWrapping="Wrap"
+                            Text="Comentarios: _____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"/>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <Button 
+                        Margin="10"
+                        Width="70"
+                        Height="30"
+                        Click="buttonImprimir_Click" GotFocus="Button_GotFocus_1">
+                        <Image Source="/imagenes/imprimir.png">
+                            
+                        </Image>                        
+                    </Button>
+                </StackPanel>  
             </Border>
         </Popup>
     </Grid>

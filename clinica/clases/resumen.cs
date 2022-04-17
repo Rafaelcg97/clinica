@@ -29,8 +29,56 @@ namespace clinica.clases
         private string fpp;
         private double talla;
         private double peso;
+        private DateTime nacimiento;
+        private string hallazgos;
+        private string eg;
+        private string au;
+        private string presentacion;
+        private string fcf;
+        private string mf;
+        private string rh;
+        private string hb;
+        private string vih;
+        private string vdlr;
+        private string ego;
+        private string uro;
+        private string glc;
+        private string os;
+        private string usg;
+        private bool seleccionado;
 
-        public resumen(int id, string fecha, string nombre, string dui, string motivo, string diagnostico, string plan, string examenes, string personales, string familiares, string g, string pv, string pc, string pp, string ab, string v, string p, string fur, string fpp, double talla, double peso)
+        public resumen(string nombre, DateTime nacimiento, string fur, string fpp, string g, string pv, string pc, string pp, string ab, string v, string familiares, string personales, double peso, double talla)
+        {
+            this.nombre = nombre;
+            this.nacimiento = nacimiento;
+            this.fur = fur;
+            this.fpp = fpp;
+            this.g = g;
+            this.pv = pv;
+            this.pc = pc;
+            this.pp = pp;
+            this.ab = ab;
+            this.v = v;
+            this.familiares = familiares;
+            this.personales = personales;
+            this.peso = peso;
+            this.talla = talla;
+        }
+
+        public resumen(string fecha, double peso, string eg, string p, string au, string presentacion, string fcf, string mf)
+        {
+            this.fecha = fecha;
+            this.peso = peso;
+            this.eg = eg;
+            this.p = p;
+            this.au = au;
+            this.presentacion = presentacion;
+            this.fcf = fcf;
+            this.mf = mf;
+
+        }
+
+        public resumen(int id, string fecha, string nombre, string dui, string motivo, string diagnostico, string plan, string examenes, string personales, string familiares, string g, string pv, string pc, string pp, string ab, string v, string p, string fur, string fpp, double talla, double peso, DateTime nacimiento, string hallazgos, string eg, string au, string presentacion, string fcf, string mf, string rh, string hb, string vih, string vdlr, string ego, string uro, string glc, string os, string usg, bool seleccionado)
         {
             this.id = id;
             this.fecha = fecha;
@@ -53,6 +101,23 @@ namespace clinica.clases
             this.fpp = fpp;
             this.talla = talla;
             this.peso = peso;
+            this.nacimiento = nacimiento;
+            this.hallazgos = hallazgos;
+            this.eg = eg;
+            this.au = au;
+            this.presentacion = presentacion;
+            this.fcf = fcf;
+            this.mf = mf;
+            this.rh = rh;
+            this.hb = hb;
+            this.vih = vih;
+            this.vdlr = vdlr;
+            this.ego = ego;
+            this.uro = uro;
+            this.glc = glc;
+            this.os = os;
+            this.usg = usg;
+            this.seleccionado = seleccionado;
         }
 
         public int Id { get => id; set => id = value; }
@@ -80,9 +145,35 @@ namespace clinica.clases
         {
             get
             {
-                double resultado = (peso / 2.2) / Math.Pow(talla, 2);
+                double resultado = Math.Round((peso / 2.2) / Math.Pow(talla, 2),4);
                 return resultado.ToString();
             }
         }
+        public string Edad
+        {
+            get
+            {
+                int edad = DateTime.Today.AddTicks(-nacimiento.Ticks).Year - 1;
+                return edad.ToString();
+            }
+        }
+
+        public DateTime Nacimiento { get => nacimiento; set => nacimiento = value; }
+        public string Hallazgos { get => hallazgos; set => hallazgos = value; }
+        public string Eg { get => eg; set => eg = value; }
+        public string Au { get => au; set => au = value; }
+        public string Presentacion { get => presentacion; set => presentacion = value; }
+        public string Fcf { get => fcf; set => fcf = value; }
+        public string Mf { get => mf; set => mf = value; }
+        public string Rh { get => rh; set => rh = value; }
+        public string Hb { get => hb; set => hb = value; }
+        public string Vih { get => vih; set => vih = value; }
+        public string Vdlr { get => vdlr; set => vdlr = value; }
+        public string Ego { get => ego; set => ego = value; }
+        public string Uro { get => uro; set => uro = value; }
+        public string Glc { get => glc; set => glc = value; }
+        public string Os { get => os; set => os = value; }
+        public string Usg { get => usg; set => usg = value; }
+        public bool Seleccionado { get => seleccionado; set => seleccionado = value; }
     }
 }

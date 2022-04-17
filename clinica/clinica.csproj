@@ -35,9 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -202,6 +204,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="imagenes\limpiar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagenes\archivo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagenes\pdf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagenes\imprimir.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -69,7 +69,7 @@
         <Viewbox
             Grid.Row="3"
             Grid.RowSpan="1"
-            Grid.ColumnSpan="8"
+            Grid.ColumnSpan="10"
             Margin="10"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom">
@@ -117,63 +117,75 @@
                     Padding="0"
                     VerticalAlignment="Center"
                     Margin="5,0,0,0"/>
+                <CheckBox
+                    x:Name="chkTipoConsulta"
+                    Height="25"
+                    FontSize="15"
+                    FontWeight="Bold"
+                    Padding="5,0,0,0"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Margin="10,0,0,0" 
+                    Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked">
+                    Consulta obstétrica
+                </CheckBox>
             </StackPanel>
         </Viewbox>
         <Viewbox
             Grid.Row="4"
-            Grid.ColumnSpan="8"
+            Grid.ColumnSpan="16"
             Grid.RowSpan="9"
             Margin="10"
             HorizontalAlignment="Left">
-            <GroupBox
+            <StackPanel
+                Orientation="Horizontal">
+                <GroupBox
                 Header="Antecedentes:"
                 FontSize="14"
                 FontWeight="Bold"
                 Height="250"
-                Width="600" 
+                Width="450" 
                 Background="#FFFAEAEA">
-                <StackPanel 
+                    <StackPanel 
                     Orientation="Horizontal">
-                    <StackPanel
+                        <StackPanel
                     Height="200"
-                    Width="200"
+                    Width="120"
                         Margin="5">
-                        <Label
+                            <Label
                             FontSize="12"
                             FontWeight="DemiBold"
-                        Content="Personales:"/>
-                        <TextBox
+                            Content="Personales:"/>
+                            <RichTextBox
                             x:Name="txtPersonales"
-                            Height="135"
-                            TextWrapping="Wrap"
+                            Height="160"
+                            Block.LineHeight="1"
                             FontSize="15"
-                            FontWeight="Normal"
-                            MaxLength="800"/>
-                    </StackPanel>
-                    <StackPanel
+                            FontWeight="Normal"/>
+                        </StackPanel>
+                        <StackPanel
                         Height="200"
-                        Width="200"
+                        Width="120"
                         Margin="5,0,10,0">
-                        <Label
+                            <Label
                             FontSize="12"
                             FontWeight="DemiBold"
                             Content="Familiares:"/>
-                        <TextBox
+                            <RichTextBox
                             x:Name="txtFamiliares"
-                            Height="135"
-                            TextWrapping="Wrap"
+                            Height="160"
                             FontSize="15"
                             FontWeight="Normal"
-                            MaxLength="800"/>
-                    </StackPanel>
-                    <StackPanel
+                            Block.LineHeight="1"/>
+                        </StackPanel>
+                        <StackPanel
                         Height="250"
                         Width="200"
                         Margin="0">
-                        <StackPanel
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -181,35 +193,16 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="FUR:"/>
-                            <DatePicker 
+                                <DatePicker 
                                 x:Name="dtpFUR"
-                                Width="125"
+                                Width="90"
                                 FontSize="11"
                                 FontWeight="Normal" SelectedDateChanged="dtpFUR_SelectedDateChanged"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
-                                FontSize="12"
-                                FontWeight="DemiBold"
-                                Padding="0"
-                                Margin="0,0,5,0"
-                                Width="25"
-                                VerticalContentAlignment="Center"
-                                Content="FPP:"/>
-                            <TextBox 
-                                x:Name="txtFPP"
-                                Width="125"
-                                FontSize="12"
-                                FontWeight="Normal"
-                                MaxLength="9"
-                                IsEnabled="False"/>
-                        </StackPanel>
-                        <StackPanel
-                            Orientation="Horizontal"
-                            Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -217,17 +210,17 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="G:"/>
-                            <TextBox 
+                                <TextBox 
                                 x:Name="txtG"
-                                Width="125"
+                                Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -235,17 +228,17 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="PV:"/>
-                            <TextBox
+                                <TextBox
                                 x:Name="txtPV"
-                                Width="125"
+                                Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -253,17 +246,17 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="PC:"/>
-                            <TextBox 
+                                <TextBox 
                                 x:Name="txtPC"
-                                Width="125"
+                                Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -271,17 +264,17 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="PP:"/>
-                            <TextBox 
+                                <TextBox 
                                 x:Name="txtPP"
-                                Width="125"
+                                Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
-                            <Label
+                                <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
@@ -289,135 +282,479 @@
                                 Width="25"
                                 VerticalContentAlignment="Center"
                                 Content="AB:"/>
-                            <TextBox 
+                                <TextBox 
                                 x:Name="txtAB"
-                                Width="125"
+                                Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                        <StackPanel
+                            </StackPanel>
+                            <StackPanel
                             Orientation="Horizontal"
                             Margin="0,9,0,0">
+                                <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="25"
+                                VerticalContentAlignment="Center"
+                                Content="NV:"/>
+                                <TextBox 
+                                x:Name="txtV"
+                                Width="90"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox
+                Margin="8"
+                Header="Examenes Fisicos"
+                FontSize="14"
+                FontWeight="Bold"
+                Height="250"
+                Width="180" 
+                Background="#FFFDFDD7">
+                    <StackPanel>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="10,5,2,2"
+                            HorizontalAlignment="Left">
                             <Label
                                 FontSize="12"
                                 FontWeight="DemiBold"
                                 Padding="0"
-                                Margin="0,0,7,0"
+                                Margin="0,0,5,0"
                                 Width="25"
                                 VerticalContentAlignment="Center"
-                                Content="V:"/>
-                            <TextBox 
-                                x:Name="txtV"
-                                Width="125"
-                                FontSize="12"
-                                FontWeight="Normal"
-                                KeyDown="soloNumerosDecimales"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
-        </Viewbox>
-        <Viewbox
-            Grid.Row="4"
-            Grid.ColumnSpan="3"
-            Grid.Column="8"
-            Grid.RowSpan="9"
-            Margin="10"
-            HorizontalAlignment="Left">
-            <GroupBox
-                Margin="8"
-                Header="Examenes Fisicos"
-                FontSize="10"
-                FontWeight="Bold"
-                Height="268"
-                Width="200" 
-                Background="#FFFDFDD7">
-                <StackPanel
-                    Height="200"
-                    Width="200"
-                    Margin="0">
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Margin="0,25,0,0"
-                        HorizontalAlignment="Center">
-                        <Label
-                            FontSize="12"
-                            FontWeight="DemiBold"
-                            Padding="0"
-                            Margin="0,0,5,0"
-                            Width="25"
-                            VerticalContentAlignment="Center"
-                            Content="P/A:"/>
+                                Content="P/A:"/>
                             <TextBox
                                 x:Name="txtP"
-                                Width="125"
+                                Width="100"
                                 FontSize="12"
                                 FontWeight="Normal" MaxLength="9"/>
-                    </StackPanel>
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Margin="0,25,0,0"
-                        HorizontalAlignment="Center">
+                        </StackPanel>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Margin="10,5,2,2"
+                            HorizontalAlignment="Left">
+                            <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="25"
+                                VerticalContentAlignment="Center"
+                                Content="Talla:"/>
+                            <TextBox 
+                                x:Name="txtTalla"
+                                Width="100"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                KeyDown="soloNumerosDecimales"
+                                TextChanged="txtTalla_TextChanged"/>
+                        </StackPanel>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            Margin="10,5,2,2">
+                            <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="25"
+                                VerticalContentAlignment="Center"
+                                Content="Peso:"/>
+                            <TextBox 
+                                x:Name="txtPeso"
+                                Width="100"
+                                FontSize="12"
+                                FontWeight="Normal" 
+                                TextChanged="txtTalla_TextChanged"/>
+                        </StackPanel>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Left"
+                            Margin="10,5,2,2">
+                            <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="25"
+                                VerticalContentAlignment="Center"
+                                Content="IMC:"/>
+                            <TextBox
+                                x:Name="txtblImc"
+                                Width="100"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                IsEnabled="False"/>
+                        </StackPanel>
                         <Label
                             FontSize="12"
                             FontWeight="DemiBold"
                             Padding="0"
-                            Margin="0,0,5,0"
-                            Width="25"
+                            Margin="10"
+                            Width="155"
                             VerticalContentAlignment="Center"
-                            Content="Talla:"/>
-                        <TextBox 
-                            x:Name="txtTalla"
-                            Width="125"
-                            FontSize="12"
+                            Content="Hallazgos:"/>
+                        <RichTextBox
+                            x:Name="txtResultadosFisicos"
+                            Margin="10,0,10,0"
+                            Height="80"
+                            FontSize="10"
                             FontWeight="Normal"
-                            KeyDown="soloNumerosDecimales"
-                            TextChanged="txtTalla_TextChanged"/>
+                            Block.LineHeight="1"/>
                     </StackPanel>
+                </GroupBox>
+                <GroupBox
+                    Margin="8"
+                    Header="Datos Obstétricos"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Height="250"
+                    Width="280" 
+                    Background="#FFE4B9F9"
+                    IsEnabled="False"
+                    x:Name="grbObste">
                     <StackPanel
-                        Orientation="Horizontal"
-                        Margin="0,25,0,0"
-                        HorizontalAlignment="Center">
-                        <Label
-                            FontSize="12"
-                            FontWeight="DemiBold"
-                            Padding="0"
-                            Margin="0,0,5,0"
-                            Width="25"
-                            VerticalContentAlignment="Center"
-                            Content="Peso:"/>
-                        <TextBox 
-                            x:Name="txtPeso"
-                            Width="125"
-                            FontSize="12"
-                            FontWeight="Normal" 
-                            TextChanged="txtTalla_TextChanged"/>
+                        Orientation="Horizontal">
+                        <StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="40"
+                                VerticalContentAlignment="Center"
+                                Content="FPP:"/>
+                                <TextBox 
+                                x:Name="txtFPP"
+                                Width="90"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                MaxLength="9"
+                                IsEnabled="False"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="EG:"/>
+                                <TextBox 
+                                    x:Name="txtEG"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"
+                                    KeyDown="soloNumerosDecimales"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="AU:"/>
+                                <TextBox 
+                                    x:Name="txtAU"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"
+                                    KeyDown="soloNumerosDecimales"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                FontSize="12"
+                                FontWeight="DemiBold"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                Width="40"
+                                VerticalContentAlignment="Center"
+                                Content="Presnt:"/>
+                                <TextBox 
+                                x:Name="txtPresent"
+                                Width="90"
+                                FontSize="12"
+                                FontWeight="Normal"
+                                MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="FCF:"/>
+                                <TextBox 
+                                    x:Name="txtFCF"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"
+                                    KeyDown="soloNumerosDecimales"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="MF:"/>
+                                <ComboBox 
+                                    x:Name="cmbMF"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="RH:"/>
+                                <TextBox 
+                                    x:Name="txtRH"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    Width="40"
+                                    VerticalContentAlignment="Center"
+                                    Content="HB:"/>
+                                <TextBox 
+                                    x:Name="txtHB"
+                                    Width="90"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"
+                                    KeyDown="soloNumerosDecimales"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="VIH:"/>
+                                <TextBox 
+                                    x:Name="txtVIH"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="VDLR:"/>
+                                <TextBox 
+                                    x:Name="txtVDLR"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="EGO:"/>
+                                <TextBox 
+                                    x:Name="txtEGO"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="URO:"/>
+                                <TextBox 
+                                    x:Name="txtURO"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="GLC:"/>
+                                <TextBox 
+                                    x:Name="txtGluc"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="O'S:"/>
+                                <TextBox 
+                                    x:Name="txtOS"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                            <StackPanel
+                            Orientation="Horizontal"
+                            Margin="0,9,0,0">
+                                <Label
+                                    FontSize="12"
+                                    FontWeight="DemiBold"
+                                    Padding="0"
+                                    Margin="10,0,5,0"
+                                    Width="35"
+                                    VerticalContentAlignment="Center"
+                                    Content="USG:"/>
+                                <TextBox 
+                                    x:Name="txtUSG"
+                                    Width="80"
+                                    FontSize="12"
+                                    FontWeight="Normal"
+                                    MaxLength="9"/>
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel
-                        Orientation="Horizontal"
-                        Margin="0,25,0,0"
-                        HorizontalAlignment="Center">
+                </GroupBox>
+                <GroupBox
+                    Header="Consulta Anterior:"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Height="250"
+                    Width="250" Background="#FFCCEACA">
+                    <StackPanel>
                         <Label
-                            FontSize="12"
-                            FontWeight="DemiBold"
-                            Padding="0"
-                            Margin="0,0,5,0"
-                            Width="25"
-                            VerticalContentAlignment="Center"
-                            Content="IMC:"/>
-                        <TextBox
-                            x:Name="txtblImc"
-                            Width="125"
-                            FontSize="12"
-                            FontWeight="Normal"
-                            IsEnabled="False"/>
+                        FontSize="10"
+                        FontWeight="DemiBold"
+                        Content="Motivo de consulta:"/>
+                        <TextBlock 
+                        x:Name="txtblMotivo"
+                        FontSize="10"
+                        FontWeight="Normal"
+                        Width="340"
+                        Margin="5"
+                        Height="25"
+                        Text="---"
+                        TextWrapping="Wrap"/>
+                        <Label
+                        FontSize="10"
+                        FontWeight="DemiBold"
+                        Content="Diagnostico:"/>
+                        <TextBlock 
+                        x:Name="txtblDiagnostico"
+                        FontSize="10"
+                        FontWeight="Normal"
+                        Width="340"
+                        Margin="5"
+                        Height="25"
+                        Text="---"
+                        TextWrapping="Wrap"/>
+                        <Label
+                        FontSize="10"
+                        FontWeight="DemiBold"
+                        Content="Plan terapeutico:"/>
+                        <TextBlock 
+                        x:Name="txtblPlan"
+                        FontSize="10"
+                        FontWeight="Normal"
+                        Width="340"
+                        Margin="5"
+                        Height="25"
+                        Text="---"
+                        TextWrapping="Wrap"/>
                     </StackPanel>
-                </StackPanel>
-
-
-            </GroupBox>
+                </GroupBox>
+            </StackPanel>
         </Viewbox>
+
         <Viewbox
             Grid.Row="12"
             Grid.ColumnSpan="11"
@@ -440,13 +777,12 @@
                             FontSize="12"
                             FontWeight="DemiBold"
                             Content="Motivo de consulta:"/>
-                        <TextBox
+                        <RichTextBox
                             x:Name="txtMotivo"
                             Height="135"
-                            TextWrapping="Wrap"
                             FontSize="15"
                             FontWeight="Normal"
-                            MaxLength="1000"/>
+                            Block.LineHeight="1"/>
                     </StackPanel>
                     <StackPanel
                         Height="200"
@@ -456,13 +792,12 @@
                             FontSize="12"
                             FontWeight="DemiBold"
                             Content="Historia Clinica:"/>
-                        <TextBox
+                        <RichTextBox
                             x:Name="txtExamenes"
                             Height="135"
-                            TextWrapping="Wrap"
                             FontSize="15"
                             FontWeight="Normal"
-                            MaxLength="1000"/>
+                            Block.LineHeight="1"/>
                     </StackPanel>
                     <StackPanel
                         Height="200"
@@ -472,13 +807,12 @@
                             FontSize="12"
                             FontWeight="DemiBold"
                         Content="Diagnostico:"/>
-                        <TextBox
+                        <RichTextBox
                             x:Name="txtDiagnostico"
                             Height="135"
-                            TextWrapping="Wrap"
                             FontSize="15"
                             FontWeight="Normal"
-                            MaxLength="1000"/>
+                            Block.LineHeight="1"/>
                     </StackPanel>
                     <StackPanel
                         Height="200"
@@ -488,74 +822,18 @@
                             FontSize="12"
                             FontWeight="DemiBold"
                         Content="Plan terapeutico:"/>
-                        <TextBox
+                        <RichTextBox
                             x:Name="txtPlanTerapeutico"
                             Height="135"
-                            TextWrapping="Wrap"
                             FontSize="15"
                             FontWeight="Normal"
-                            MaxLength="1000"/>
+                            Block.LineHeight="1"/>
                     </StackPanel>
                 </StackPanel>
 
             </GroupBox>
         </Viewbox>
-        <Viewbox
-            Grid.Row="4"
-            Grid.Column="11"
-            Grid.ColumnSpan="6"
-            Grid.RowSpan="9"
-            Margin="10"
-            HorizontalAlignment="Left">
-            <GroupBox
-                Header="Consulta Anterior:"
-                FontSize="14"
-                FontWeight="Bold"
-                Height="200"
-                Width="350" Background="#FFCCEACA">
-                <StackPanel>
-                    <Label
-                        FontSize="10"
-                        FontWeight="DemiBold"
-                        Content="Motivo de consulta:"/>
-                    <TextBlock 
-                        x:Name="txtblMotivo"
-                        FontSize="10"
-                        FontWeight="Normal"
-                        Width="340"
-                        Margin="5"
-                        Height="25"
-                        Text="---"
-                        TextWrapping="Wrap"/>
-                    <Label
-                        FontSize="10"
-                        FontWeight="DemiBold"
-                        Content="Diagnostico:"/>
-                    <TextBlock 
-                        x:Name="txtblDiagnostico"
-                        FontSize="10"
-                        FontWeight="Normal"
-                        Width="340"
-                        Margin="5"
-                        Height="25"
-                        Text="---"
-                        TextWrapping="Wrap"/>
-                    <Label
-                        FontSize="10"
-                        FontWeight="DemiBold"
-                        Content="Plan terapeutico:"/>
-                    <TextBlock 
-                        x:Name="txtblPlan"
-                        FontSize="10"
-                        FontWeight="Normal"
-                        Width="340"
-                        Margin="5"
-                        Height="25"
-                        Text="---"
-                        TextWrapping="Wrap"/>
-                </StackPanel>
-            </GroupBox>
-        </Viewbox>
+
         <Viewbox
             Grid.Row="13"
             Grid.Column="11"

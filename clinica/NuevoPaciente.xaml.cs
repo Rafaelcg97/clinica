@@ -147,5 +147,12 @@ namespace clinica
                 }
             }
         }
+
+        private void dpFecha_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DateTime nacimiento = Convert.ToDateTime(dpFecha.SelectedDate); //Fecha de nacimiento
+            int edad = DateTime.Today.AddTicks(-nacimiento.Ticks).Year - 1;
+            txtEdad.Text = edad.ToString();
+        }
     }
 }

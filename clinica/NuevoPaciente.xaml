@@ -148,7 +148,27 @@
                             FontSize="5" 
                             Height="15" 
                             Width="100" 
-                            VerticalContentAlignment="Center"/>
+                            VerticalContentAlignment="Center" 
+                            SelectedDateChanged="dpFecha_SelectedDateChanged"
+                            />
+                    </StackPanel>
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        Margin="10">
+                        <Label 
+                            Content="Edad:" 
+                            Height="20" 
+                            FontSize="7" 
+                            Width="100" 
+                            FontWeight="Bold"/>
+                        <TextBox 
+                            x:Name="txtEdad" 
+                            FontSize="7" 
+                            Height="15" 
+                            Width="100" 
+                            VerticalContentAlignment="Center" 
+                            MaxLength="65"
+                            IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel
                         Orientation="Horizontal" 
