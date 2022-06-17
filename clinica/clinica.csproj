@@ -78,8 +78,8 @@
     </ApplicationDefinition>
     <Compile Include="clases\aviso.cs" />
     <Compile Include="clases\conexioSQL.cs" />
+    <Compile Include="clases\consulta.cs" />
     <Compile Include="clases\paciente.cs" />
-    <Compile Include="clases\resumen.cs" />
     <Compile Include="Index.xaml.cs">
       <DependentUpon>Index.xaml</DependentUpon>
     </Compile>
@@ -213,6 +213,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="imagenes\imprimir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagenes\lapiz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagenes\pdf2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

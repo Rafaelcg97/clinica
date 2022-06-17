@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -22,66 +23,19 @@ namespace clinica
         public RevisarHistorial()
         {
             InitializeComponent();
-            string sql = "SELECT TOP 100 idConsulta, fechaConsulta, c.nombrePaciente, c.documentoPaciente, motivoConsulta, diagnosticoConsulta, " +
-    "planTerapeuticoConsulta, examenesFisicosConsulta, b.personalesAntecedentes, b.familiaresAntecedentes, " +
-    "b.gAntecedentes, b.pvAntecedentes, b.pcAntecendentes, b.ppAntecendentes, b.abAntecendentes, b.vAntecendentes, " +
-    "b.pAntecendentes, b.furAntecedentes, b.fppAntecedentes, b.tallaAntecedentes, c.fechaNacimientoPaciente, b.hallazgosAntecedentes, b.egAntecedentes, b.auAntecedentes," +
-    "b.presentAntecedentes,b.fcfAntecedentes, b.mfAntecedentes, b.rhAntecedentes,  b.hbAntecedentes,  b.vdlrAntecedentes," +
-    "b.vihAntecedentes, b.egoAntecedentes, b.uroAntecedentes, b.glcAntecedentes, b.osAntecedentes, b.usgAntecedentes, " +
-    "b.pesoAntecedentes	 FROM consultas a " +
-    "LEFT JOIN antecedentes b ON a.idConsulta=b.idConsultas " +
-    "LEFT JOIN pacientes c ON a.idPaciente=c.idPaciente ORDER BY idConsulta DESC";
             using (SqlConnection cn = conexioSQL.Clinica())
             {
                 try
                 {
-                    SqlCommand cm = new SqlCommand(sql, cn);
-                    SqlDataReader dr = cm.ExecuteReader();
-                    while (dr.Read())
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_historial", cn))
                     {
-                        lstPacientes.Items.Add(
-                            new resumen(
-                                Convert.ToInt32(dr["IdConsulta"]),
-                                Convert.ToDateTime(dr["fechaConsulta"]).ToString("yyyy-MM-dd"),
-                                dr["nombrePaciente"].ToString(),
-                                dr["documentoPaciente"].ToString(),
-                                dr["motivoConsulta"].ToString(),
-                                dr["diagnosticoConsulta"].ToString(),
-                                dr["planTerapeuticoConsulta"].ToString(),
-                                dr["examenesFisicosConsulta"].ToString(),
-                                dr["personalesAntecedentes"].ToString(),
-                                dr["familiaresAntecedentes"].ToString(),
-                                dr["gAntecedentes"].ToString(),
-                                dr["pvAntecedentes"].ToString(),
-                                dr["pcAntecendentes"].ToString(),
-                                dr["ppAntecendentes"].ToString(),
-                                dr["abAntecendentes"].ToString(),
-                                dr["vAntecendentes"].ToString(),
-                                dr["pAntecendentes"].ToString(),
-                                dr["furAntecedentes"].ToString(),
-                                dr["fppAntecedentes"].ToString(),
-                                Convert.ToDouble(dr["tallaAntecedentes"] is DBNull ? 0 : dr["tallaAntecedentes"]),
-                                Convert.ToDouble(dr["pesoAntecedentes"] is DBNull ? 0 : dr["pesoAntecedentes"]),
-                                Convert.ToDateTime(dr["fechaNacimientoPaciente"]),
-                                    dr["hallazgosAntecedentes"].ToString(),
-                                    dr["egAntecedentes"].ToString(),
-                                    dr["auAntecedentes"].ToString(),
-                                    dr["presentAntecedentes"].ToString(),
-                                    dr["fcfAntecedentes"].ToString(),
-                                    dr["mfAntecedentes"].ToString(),
-                                    dr["rhAntecedentes"].ToString(),
-                                    dr["hbAntecedentes"].ToString(),
-                                    dr["vihAntecedentes"].ToString(),
-                                    dr["vdlrAntecedentes"].ToString(),
-                                    dr["egoAntecedentes"].ToString(),
-                                    dr["uroAntecedentes"].ToString(),
-                                    dr["glcAntecedentes"].ToString(),
-                                    dr["osAntecedentes"].ToString(),
-                                    dr["usgAntecedentes"].ToString(),
-                                    false
-                                ));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", txtBuscar.Text);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        lstPacientes.ItemsSource = dt.DefaultView;
                     }
-                    dr.Close();
                 }
                 catch (Exception ex)
                 {
@@ -89,213 +43,38 @@ namespace clinica
                 }
             }
         }
-
         private void btnAtras_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-
         private void btnBuscarPaciente_Click(object sender, RoutedEventArgs e)
         {
-            lstPacientes.Items.Clear();
-            if (string.IsNullOrEmpty(txtBuscar.Text))
+            using (SqlConnection cn = conexioSQL.Clinica())
             {
-                string sql = "SELECT TOP 100 idConsulta, fechaConsulta, c.nombrePaciente, c.documentoPaciente, motivoConsulta, diagnosticoConsulta, " +
-                    "planTerapeuticoConsulta, examenesFisicosConsulta, b.personalesAntecedentes, b.familiaresAntecedentes, " +
-                    "b.gAntecedentes, b.pvAntecedentes, b.pcAntecendentes, b.ppAntecendentes, b.abAntecendentes, b.vAntecendentes, " +
-                    "b.pAntecendentes, b.furAntecedentes, b.fppAntecedentes, b.tallaAntecedentes, c.fechaNacimientoPaciente, b.hallazgosAntecedentes, b.egAntecedentes, b.auAntecedentes," +
-                    "b.presentAntecedentes,b.fcfAntecedentes, b.mfAntecedentes, b.rhAntecedentes,  b.hbAntecedentes,  b.vdlrAntecedentes," +
-                    "b.vihAntecedentes, b.egoAntecedentes, b.uroAntecedentes, b.glcAntecedentes, b.osAntecedentes, b.usgAntecedentes, " +
-                    "b.pesoAntecedentes	 FROM consultas a " +
-                    "LEFT JOIN antecedentes b ON a.idConsulta=b.idConsultas " +
-                    "LEFT JOIN pacientes c ON a.idPaciente=c.idPaciente ORDER BY idConsulta DESC";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                try
                 {
-                    try
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_historial", cn))
                     {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            lstPacientes.Items.Add(
-                                new resumen(
-                                    Convert.ToInt32(dr["IdConsulta"]),
-                                    Convert.ToDateTime(dr["fechaConsulta"]).ToString("yyyy-MM-dd"),
-                                    dr["nombrePaciente"].ToString(),
-                                    dr["documentoPaciente"].ToString(),
-                                    dr["motivoConsulta"].ToString(),
-                                    dr["diagnosticoConsulta"].ToString(),
-                                    dr["planTerapeuticoConsulta"].ToString(),
-                                    dr["examenesFisicosConsulta"].ToString(),
-                                    dr["personalesAntecedentes"].ToString(),
-                                    dr["familiaresAntecedentes"].ToString(),
-                                    dr["gAntecedentes"].ToString(),
-                                    dr["pvAntecedentes"].ToString(),
-                                    dr["pcAntecendentes"].ToString(),
-                                    dr["ppAntecendentes"].ToString(),
-                                    dr["abAntecendentes"].ToString(),
-                                    dr["vAntecendentes"].ToString(),
-                                    dr["pAntecendentes"].ToString(),
-                                    dr["furAntecedentes"].ToString(),
-                                    dr["fppAntecedentes"].ToString(),
-                                    Convert.ToDouble(dr["tallaAntecedentes"] is DBNull ? 0 : dr["tallaAntecedentes"]),
-                                    Convert.ToDouble(dr["pesoAntecedentes"] is DBNull ? 0 : dr["pesoAntecedentes"]),
-                                    Convert.ToDateTime(dr["fechaNacimientoPaciente"]),
-                                    dr["hallazgosAntecedentes"].ToString(),
-                                    dr["egAntecedentes"].ToString(),
-                                    dr["auAntecedentes"].ToString(),
-                                    dr["presentAntecedentes"].ToString(),
-                                    dr["fcfAntecedentes"].ToString(),
-                                    dr["mfAntecedentes"].ToString(),
-                                    dr["rhAntecedentes"].ToString(),
-                                    dr["hbAntecedentes"].ToString(),
-                                    dr["vihAntecedentes"].ToString(),
-                                    dr["vdlrAntecedentes"].ToString(),
-                                    dr["egoAntecedentes"].ToString(),
-                                    dr["uroAntecedentes"].ToString(),
-                                    dr["glcAntecedentes"].ToString(),
-                                    dr["osAntecedentes"].ToString(),
-                                    dr["usgAntecedentes"].ToString(),
-                                    false
-                                    ));
-                        }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", txtBuscar.Text);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        lstPacientes.ItemsSource = dt.DefaultView;
                     }
                 }
-            }
-            else
-            {
-                string sql = "SELECT TOP 100 idConsulta, fechaConsulta, c.nombrePaciente, c.documentoPaciente, motivoConsulta, diagnosticoConsulta, " +
-                    "planTerapeuticoConsulta, examenesFisicosConsulta, b.personalesAntecedentes, b.familiaresAntecedentes, " +
-                    "b.gAntecedentes, b.pvAntecedentes, b.pcAntecendentes, b.ppAntecendentes, b.abAntecendentes, b.vAntecendentes, " +
-                    "b.pAntecendentes, b.furAntecedentes, b.fppAntecedentes, b.tallaAntecedentes, " +
-                    "b.pesoAntecedentes, c.fechaNacimientoPaciente, b.hallazgosAntecedentes, b.egAntecedentes, b.auAntecedentes," +
-                    "b.presentAntecedentes,b.fcfAntecedentes, b.mfAntecedentes, b.rhAntecedentes,  b.hbAntecedentes,  b.vdlrAntecedentes," +
-                    "b.vihAntecedentes, b.egoAntecedentes, b.uroAntecedentes, b.glcAntecedentes, b.osAntecedentes, b.usgAntecedentes FROM consultas a " +
-                    "LEFT JOIN antecedentes b ON a.idConsulta=b.idConsultas " +
-                    "LEFT JOIN pacientes c ON a.idPaciente=c.idPaciente " +
-                    "WHERE c.nombrePaciente LIKE '%" + txtBuscar.Text + "%' ORDER BY idConsulta DESC";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            lstPacientes.Items.Add(
-                                new resumen(
-                                    Convert.ToInt32(dr["IdConsulta"]),
-                                    Convert.ToDateTime(dr["fechaConsulta"]).ToString("yyyy-MM-dd"),
-                                    dr["nombrePaciente"].ToString(),
-                                    dr["documentoPaciente"].ToString(),
-                                    dr["motivoConsulta"].ToString(),
-                                    dr["diagnosticoConsulta"].ToString(),
-                                    dr["planTerapeuticoConsulta"].ToString(),
-                                    dr["examenesFisicosConsulta"].ToString(),
-                                    dr["personalesAntecedentes"].ToString(),
-                                    dr["familiaresAntecedentes"].ToString(),
-                                    dr["gAntecedentes"].ToString(),
-                                    dr["pvAntecedentes"].ToString(),
-                                    dr["pcAntecendentes"].ToString(),
-                                    dr["ppAntecendentes"].ToString(),
-                                    dr["abAntecendentes"].ToString(),
-                                    dr["vAntecendentes"].ToString(),
-                                    dr["pAntecendentes"].ToString(),
-                                    dr["furAntecedentes"].ToString(),
-                                    dr["fppAntecedentes"].ToString(),
-                                    Convert.ToDouble(dr["tallaAntecedentes"] is DBNull ? 0 : dr["tallaAntecedentes"]),
-                                    Convert.ToDouble(dr["pesoAntecedentes"] is DBNull ? 0 : dr["pesoAntecedentes"]),
-                                    Convert.ToDateTime(dr["fechaNacimientoPaciente"]),
-                                    dr["hallazgosAntecedentes"].ToString(),
-                                    dr["egAntecedentes"].ToString(),
-                                    dr["auAntecedentes"].ToString(),
-                                    dr["presentAntecedentes"].ToString(),
-                                    dr["fcfAntecedentes"].ToString(),
-                                    dr["mfAntecedentes"].ToString(),
-                                    dr["rhAntecedentes"].ToString(),
-                                    dr["hbAntecedentes"].ToString(),
-                                    dr["vihAntecedentes"].ToString(),
-                                    dr["vdlrAntecedentes"].ToString(),
-                                    dr["egoAntecedentes"].ToString(),
-                                    dr["uroAntecedentes"].ToString(),
-                                    dr["glcAntecedentes"].ToString(),
-                                    dr["osAntecedentes"].ToString(),
-                                    dr["usgAntecedentes"].ToString(),
-                                    false
-                                    ));
-                        }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+
         }
-
         private void Button_GotFocus(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             lstPacientes.SelectedItem = button.DataContext;
         }
-
-        private void btnAntedentes_Click(object sender, RoutedEventArgs e)
-        {
-            popUpAntedentes.IsOpen = true;
-            resumen consulta = (resumen)lstPacientes.SelectedItem;
-            lblFamiliares.Text = consulta.Familiares;
-            lblPersonales.Text = consulta.Personales;
-            lblg.Text = consulta.G;
-            lblpv.Text = consulta.Pv;
-            lblpc.Text = consulta.Pc;
-            lblpp.Text = consulta.Pp;
-            lblab.Text = consulta.Ab;
-            lblv.Text = consulta.V;
-        }
-
-        private void btnFisicos_Click(object sender, RoutedEventArgs e)
-        {
-            popUpFisicos.IsOpen = true;
-            resumen consulta = (resumen)lstPacientes.SelectedItem;
-            lblFamiliares.Text = consulta.Familiares;
-            lblPersonales.Text = consulta.Personales;
-            lblp.Text = consulta.P;
-            lblHallazgos.Text = consulta.Hallazgos;
-            lblfur.Text = consulta.Fur;
-            lblimc.Text = consulta.Imc;
-            lbltalla.Text = consulta.Talla.ToString();
-            lblpeso.Text = consulta.Peso.ToString();
-        }
-
-        private void btnObstetricos_Click(object sender, RoutedEventArgs e)
-        {
-            popObstetricos.IsOpen = true;
-            resumen consulta = (resumen)lstPacientes.SelectedItem;
-            lblFPP.Text = consulta.Fpp;
-            lblEG.Text = consulta.Eg;
-            lblAU.Text = consulta.Au;
-            lblPresent.Text = consulta.Presentacion;
-            lblFCF.Text = consulta.Fcf;
-            lblMF.Text = consulta.Mf;
-            lblRH.Text = consulta.Rh;
-            lblHB.Text = consulta.Hb;
-            lblVIH.Text = consulta.Vih;
-            lblVDLR.Text = consulta.Vdlr;
-            lblEGO.Text = consulta.Ego;
-            lblURO.Text = consulta.Uro;
-            lblGLC.Text = consulta.Glc;
-            lblOS.Text = consulta.Os;
-            lblUSG.Text = consulta.Usg;
-        }
-
         private void btnDescargar_Click(object sender, RoutedEventArgs e)
         {
             StringBuilder buffer = new StringBuilder();
@@ -375,83 +154,6 @@ namespace clinica
             buffer.Append("USG");
             buffer.Append("\n");
             #endregion
-            foreach (resumen item in lstPacientes.Items)
-            {
-                buffer.Append(item.Fecha);
-                buffer.Append(",");
-                buffer.Append(item.Nombre);
-                buffer.Append(",");
-                buffer.Append(item.Dui);
-                buffer.Append(",");
-                buffer.Append(item.Edad);
-                buffer.Append(",");
-                buffer.Append(item.Motivo.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Diagnostico.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Plan.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Examenes.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Personales.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Familiares.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Fur);
-                buffer.Append(",");
-                buffer.Append(item.G);
-                buffer.Append(",");
-                buffer.Append(item.Pv);
-                buffer.Append(",");
-                buffer.Append(item.Pc);
-                buffer.Append(",");
-                buffer.Append(item.Pp);
-                buffer.Append(",");
-                buffer.Append(item.Ab);
-                buffer.Append(",");
-                buffer.Append(item.V);
-                buffer.Append(",");
-                buffer.Append(item.P);
-                buffer.Append(",");
-                buffer.Append(item.Talla);
-                buffer.Append(",");
-                buffer.Append(item.Peso);
-                buffer.Append(",");
-                buffer.Append(item.Imc);
-                buffer.Append(",");
-                buffer.Append(item.Hallazgos.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "));
-                buffer.Append(",");
-                buffer.Append(item.Fpp);
-                buffer.Append(",");
-                buffer.Append(item.Eg);
-                buffer.Append(",");
-                buffer.Append(item.Au);
-                buffer.Append(",");
-                buffer.Append(item.Presentacion);
-                buffer.Append(",");
-                buffer.Append(item.Fcf);
-                buffer.Append(",");
-                buffer.Append(item.Mf);
-                buffer.Append(",");
-                buffer.Append(item.Rh);
-                buffer.Append(",");
-                buffer.Append(item.Hb);
-                buffer.Append(",");
-                buffer.Append(item.Vih);
-                buffer.Append(",");
-                buffer.Append(item.Vdlr);
-                buffer.Append(",");
-                buffer.Append(item.Ego);
-                buffer.Append(",");
-                buffer.Append(item.Uro);
-                buffer.Append(",");
-                buffer.Append(item.Glc);
-                buffer.Append(",");
-                buffer.Append(item.Os);
-                buffer.Append(",");
-                buffer.Append(item.Usg);
-                buffer.Append("\n");
-            }
             String result = buffer.ToString();
             try
             {
@@ -474,30 +176,67 @@ namespace clinica
                 MessageBox.Show(ex.ToString());
             }
         }
-
         private void btnPDF_Click(object sender, RoutedEventArgs e)
         {
             int conteo = 0;
             int conteoPerfil = 0;
-            List<resumen> datosSeleccionados= new List<resumen>();
-            List<resumen> datosPerfil = new List<resumen>();
-            foreach (resumen item in lstPacientes.Items)
+            List<consulta> datosSeleccionados = new List<consulta>();
+            List<consulta> datosPerfil = new List<consulta>();
+            foreach (DataRowView dataRowView in lstPacientes.SelectedItems)
             {
-                if (item.Seleccionado == true)
+                conteo++;
+                consulta consulta = new consulta();
+                consulta.Id = Convert.ToInt32(dataRowView.Row.ItemArray[0]);
+                consulta.Nombre = Convert.ToString(dataRowView.Row.ItemArray[1]);
+                consulta.FechaNacimiento = Convert.ToDateTime(dataRowView.Row.ItemArray[2]);
+                consulta.IdConsulta = Convert.ToInt32(dataRowView.Row.ItemArray[4]);
+                consulta.TipoConsulta = Convert.ToBoolean(dataRowView.Row.ItemArray[5]);
+                consulta.FechaConsulta = Convert.ToDateTime(dataRowView.Row.ItemArray[6]);
+                consulta.Personales = Convert.ToString(dataRowView.Row.ItemArray[7]);
+                consulta.Familiares = Convert.ToString(dataRowView.Row.ItemArray[8]);
+                consulta.Fur = Convert.ToDateTime(dataRowView.Row.ItemArray[9]);
+                consulta.G = Convert.ToString(dataRowView.Row.ItemArray[10]);
+                consulta.Pv = Convert.ToString(dataRowView.Row.ItemArray[11]);
+                consulta.Pc = Convert.ToString(dataRowView.Row.ItemArray[12]);
+                consulta.Pp = Convert.ToString(dataRowView.Row.ItemArray[13]);
+                consulta.Ab = Convert.ToString(dataRowView.Row.ItemArray[14]);
+                consulta.Nv = Convert.ToString(dataRowView.Row.ItemArray[15]);
+                consulta.Pa = Convert.ToString(dataRowView.Row.ItemArray[16]);
+                consulta.Talla = Convert.ToSingle(dataRowView.Row.ItemArray[17]);
+                consulta.Peso = Convert.ToSingle(dataRowView.Row.ItemArray[18]);
+                consulta.HallazgosFisicos = Convert.ToString(dataRowView.Row.ItemArray[19]);
+                consulta.Fpp = Convert.ToDateTime(dataRowView.Row.ItemArray[20]);
+                consulta.Eg = Convert.ToString(dataRowView.Row.ItemArray[21]);
+                consulta.Au = Convert.ToString(dataRowView.Row.ItemArray[22]);
+                consulta.Present = Convert.ToString(dataRowView.Row.ItemArray[23]);
+                consulta.Fcf = Convert.ToString(dataRowView.Row.ItemArray[24]);
+                consulta.Mf = Convert.ToString(dataRowView.Row.ItemArray[25]);
+                consulta.Rh = Convert.ToString(string.IsNullOrEmpty(dataRowView.Row.ItemArray[26].ToString()) ? "-" : dataRowView.Row.ItemArray[26]);
+                consulta.Hb = Convert.ToString(dataRowView.Row.ItemArray[27]);
+                consulta.Vih = Convert.ToString(dataRowView.Row.ItemArray[28]);
+                consulta.Vdlr = Convert.ToString(dataRowView.Row.ItemArray[29]);
+                consulta.Ego = Convert.ToString(dataRowView.Row.ItemArray[30]);
+                consulta.Uro = Convert.ToString(dataRowView.Row.ItemArray[31]);
+                consulta.Glc= Convert.ToString(dataRowView.Row.ItemArray[32]);
+                consulta.Os= Convert.ToString(dataRowView.Row.ItemArray[33]);
+                consulta.Usg= Convert.ToString(dataRowView.Row.ItemArray[34]);
+                consulta.MotivoConsulta= Convert.ToString(dataRowView.Row.ItemArray[35]);
+                consulta.HistoriaClinica= Convert.ToString(dataRowView.Row.ItemArray[36]);
+                consulta.Diagnostico= Convert.ToString(dataRowView.Row.ItemArray[37]);
+                consulta.PlanTerapeutico= Convert.ToString(dataRowView.Row.ItemArray[38]);
+                datosSeleccionados.Add(consulta);
+
+                //agregar conteo de perfil
+                if(Convert.ToString(dataRowView.Row.ItemArray[26]) != "-")
                 {
-                    conteo++;
-                    datosSeleccionados.Add(item);
-                    if (item.Rh.Length > 0)
-                    {
-                        datosPerfil.Add(item);
-                        conteoPerfil++;
-                    }
+                    datosPerfil.Add(consulta);
+                    conteoPerfil++;
                 }
             }
             if (conteo > 0)
             {
                 popPDF.IsOpen = true;
-                resumen ultimoRegistro = datosSeleccionados.Last(); //estan ordenados de manera descendente por fecha
+                consulta ultimoRegistro = datosSeleccionados.Last(); //estan ordenados de manera descendente por fecha
                 lblNombre.Content = ultimoRegistro.Nombre;
                 lblEdad.Content = ultimoRegistro.Edad;
                 lblImpFPP.Content = ultimoRegistro.Fpp;
@@ -507,7 +246,7 @@ namespace clinica
                 lblImpPC.Content = ultimoRegistro.Pc;
                 lblImpPP.Content = ultimoRegistro.Pp;
                 lblImpAB.Content = ultimoRegistro.Ab;
-                lblImpNV.Content = ultimoRegistro.V;
+                lblImpNV.Content = ultimoRegistro.Nv;
                 lblImpFamiliares.Text = ultimoRegistro.Familiares;
                 lblImpPersonales.Text = ultimoRegistro.Personales;
                 lblImpPeso.Content = ultimoRegistro.Peso;
@@ -521,25 +260,23 @@ namespace clinica
                 dgPrimerPerfil.Items.Clear();
                 dgSegundoPerfil.Items.Clear();
 
-                resumen primerPerfil = datosPerfil.Last();
-                dgPrimerPerfil.Items.Add(primerPerfil);
 
-                if (conteoPerfil > 1)
+                if (conteoPerfil > 0)
                 {
-                    resumen segundoPerfil = datosPerfil.First();
-                    dgSegundoPerfil.Items.Add(segundoPerfil);
+                    consulta primerPerfil = datosPerfil.Last();
+                    dgPrimerPerfil.Items.Add(primerPerfil);
+
+                    if (conteoPerfil > 1)
+                    {
+                        consulta segundoPerfil = datosPerfil.First();
+                        dgSegundoPerfil.Items.Add(segundoPerfil);
+                    }
                 }
-
-
-
-                
             }
             else
             {
-                MessageBox.Show("No hay items seleccionados","Atencion",MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show("No hay items seleccionados", "Atencion", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
-
         }
         public void Print_WPF_Preview(FrameworkElement wpf_Element, string nomre)
 
@@ -598,10 +335,146 @@ namespace clinica
             string nombre = nombreArchivo + Guid.NewGuid().ToString("n").Substring(0, 8) + ".xps";
             Print_WPF_Preview(areaImpresion, nombre);
         }
-
         private void Button_GotFocus_1(object sender, RoutedEventArgs e)
         {
             scroll.ScrollToHome();
+        }
+        private void btnEditar_Click(object sender, RoutedEventArgs e)
+        {
+            DataRowView dataRowView = (DataRowView)lstPacientes.SelectedItem;
+            consulta consulta = new consulta();
+            consulta.Id = Convert.ToInt32(dataRowView.Row.ItemArray[0]);
+            consulta.Nombre = Convert.ToString(dataRowView.Row.ItemArray[1]);
+            consulta.FechaNacimiento = Convert.ToDateTime(dataRowView.Row.ItemArray[2]);
+            consulta.IdConsulta = Convert.ToInt32(dataRowView.Row.ItemArray[4]);
+            consulta.TipoConsulta = Convert.ToBoolean(dataRowView.Row.ItemArray[5]);
+            consulta.FechaConsulta = Convert.ToDateTime(dataRowView.Row.ItemArray[6]);
+            consulta.Personales = Convert.ToString(dataRowView.Row.ItemArray[7]);
+            consulta.Familiares = Convert.ToString(dataRowView.Row.ItemArray[8]);
+            consulta.Fur = Convert.ToDateTime(dataRowView.Row.ItemArray[9]);
+            consulta.G = Convert.ToString(dataRowView.Row.ItemArray[10]);
+            consulta.Pv = Convert.ToString(dataRowView.Row.ItemArray[11]);
+            consulta.Pc = Convert.ToString(dataRowView.Row.ItemArray[12]);
+            consulta.Pp = Convert.ToString(dataRowView.Row.ItemArray[13]);
+            consulta.Ab = Convert.ToString(dataRowView.Row.ItemArray[14]);
+            consulta.Nv = Convert.ToString(dataRowView.Row.ItemArray[15]);
+            consulta.Pa = Convert.ToString(dataRowView.Row.ItemArray[16]);
+            consulta.Talla = Convert.ToSingle(dataRowView.Row.ItemArray[17]);
+            consulta.Peso = Convert.ToSingle(dataRowView.Row.ItemArray[18]);
+            consulta.HallazgosFisicos = Convert.ToString(dataRowView.Row.ItemArray[19]);
+            consulta.Fpp = Convert.ToDateTime(dataRowView.Row.ItemArray[20]);
+            consulta.Eg = Convert.ToString(dataRowView.Row.ItemArray[21]);
+            consulta.Au = Convert.ToString(dataRowView.Row.ItemArray[22]);
+            consulta.Present = Convert.ToString(dataRowView.Row.ItemArray[23]);
+            consulta.Fcf = Convert.ToString(dataRowView.Row.ItemArray[24]);
+            consulta.Mf = Convert.ToString(dataRowView.Row.ItemArray[25]);
+            consulta.Rh = Convert.ToString(string.IsNullOrEmpty(dataRowView.Row.ItemArray[26].ToString()) ? "-" : dataRowView.Row.ItemArray[26]);
+            consulta.Hb = Convert.ToString(dataRowView.Row.ItemArray[27]);
+            consulta.Vih = Convert.ToString(dataRowView.Row.ItemArray[28]);
+            consulta.Vdlr = Convert.ToString(dataRowView.Row.ItemArray[29]);
+            consulta.Ego = Convert.ToString(dataRowView.Row.ItemArray[30]);
+            consulta.Uro = Convert.ToString(dataRowView.Row.ItemArray[31]);
+            consulta.Glc= Convert.ToString(dataRowView.Row.ItemArray[32]);
+            consulta.Os= Convert.ToString(dataRowView.Row.ItemArray[33]);
+            consulta.Usg= Convert.ToString(dataRowView.Row.ItemArray[34]);
+            consulta.MotivoConsulta= Convert.ToString(dataRowView.Row.ItemArray[35]);
+            consulta.HistoriaClinica= Convert.ToString(dataRowView.Row.ItemArray[36]);
+            consulta.Diagnostico= Convert.ToString(dataRowView.Row.ItemArray[37]);
+            consulta.PlanTerapeutico= Convert.ToString(dataRowView.Row.ItemArray[38]);
+            
+            NavigationService.Navigate(new NuevaConsulta(consulta));
+        }
+        private void btnPDF2_Click(object sender, RoutedEventArgs e)
+        {
+            int conteo = 0;
+            consulta consulta = new consulta();
+            foreach (DataRowView dataRowView in lstPacientes.SelectedItems)
+            {
+                conteo++;
+                consulta.Id = Convert.ToInt32(dataRowView.Row.ItemArray[0]);
+                consulta.Nombre = Convert.ToString(dataRowView.Row.ItemArray[1]);
+                consulta.FechaNacimiento = Convert.ToDateTime(dataRowView.Row.ItemArray[2]);
+                consulta.IdConsulta = Convert.ToInt32(dataRowView.Row.ItemArray[4]);
+                consulta.TipoConsulta = Convert.ToBoolean(dataRowView.Row.ItemArray[5]);
+                consulta.FechaConsulta = Convert.ToDateTime(dataRowView.Row.ItemArray[6]);
+                consulta.Personales = Convert.ToString(dataRowView.Row.ItemArray[7]);
+                consulta.Familiares = Convert.ToString(dataRowView.Row.ItemArray[8]);
+                consulta.Fur = Convert.ToDateTime(dataRowView.Row.ItemArray[9]);
+                consulta.G = Convert.ToString(dataRowView.Row.ItemArray[10]);
+                consulta.Pv = Convert.ToString(dataRowView.Row.ItemArray[11]);
+                consulta.Pc = Convert.ToString(dataRowView.Row.ItemArray[12]);
+                consulta.Pp = Convert.ToString(dataRowView.Row.ItemArray[13]);
+                consulta.Ab = Convert.ToString(dataRowView.Row.ItemArray[14]);
+                consulta.Nv = Convert.ToString(dataRowView.Row.ItemArray[15]);
+                consulta.Pa = Convert.ToString(dataRowView.Row.ItemArray[16]);
+                consulta.Talla = Convert.ToSingle(dataRowView.Row.ItemArray[17]);
+                consulta.Peso = Convert.ToSingle(dataRowView.Row.ItemArray[18]);
+                consulta.HallazgosFisicos = Convert.ToString(dataRowView.Row.ItemArray[19]);
+                consulta.Fpp = Convert.ToDateTime(dataRowView.Row.ItemArray[20]);
+                consulta.Eg = Convert.ToString(dataRowView.Row.ItemArray[21]);
+                consulta.Au = Convert.ToString(dataRowView.Row.ItemArray[22]);
+                consulta.Present = Convert.ToString(dataRowView.Row.ItemArray[23]);
+                consulta.Fcf = Convert.ToString(dataRowView.Row.ItemArray[24]);
+                consulta.Mf = Convert.ToString(dataRowView.Row.ItemArray[25]);
+                consulta.Rh = Convert.ToString(string.IsNullOrEmpty(dataRowView.Row.ItemArray[26].ToString()) ? "-" : dataRowView.Row.ItemArray[26]);
+                consulta.Hb = Convert.ToString(dataRowView.Row.ItemArray[27]);
+                consulta.Vih = Convert.ToString(dataRowView.Row.ItemArray[28]);
+                consulta.Vdlr = Convert.ToString(dataRowView.Row.ItemArray[29]);
+                consulta.Ego = Convert.ToString(dataRowView.Row.ItemArray[30]);
+                consulta.Uro = Convert.ToString(dataRowView.Row.ItemArray[31]);
+                consulta.Glc = Convert.ToString(dataRowView.Row.ItemArray[32]);
+                consulta.Os = Convert.ToString(dataRowView.Row.ItemArray[33]);
+                consulta.Usg = Convert.ToString(dataRowView.Row.ItemArray[34]);
+                consulta.MotivoConsulta = Convert.ToString(dataRowView.Row.ItemArray[35]);
+                consulta.HistoriaClinica = Convert.ToString(dataRowView.Row.ItemArray[36]);
+                consulta.Diagnostico = Convert.ToString(dataRowView.Row.ItemArray[37]);
+                consulta.PlanTerapeutico = Convert.ToString(dataRowView.Row.ItemArray[38]);
+
+                if (conteo == 1)
+                {
+                    break;
+                }
+            }
+
+            if (conteo == 0)
+            {
+                MessageBox.Show("No ha seleccionado ningun registro");
+            }
+            else
+            {
+                popPDF2.IsOpen = true;
+                lblNombre2.Content = consulta.Nombre;
+                lblEdad2.Content = consulta.Edad;
+                lblFUR2.Content = consulta.Fur;
+                lblImpG2.Content = consulta.G;
+                lblImpPV2.Content = consulta.Pv;
+                lblImpPC2.Content = consulta.Pc;
+                lblImpPP2.Content = consulta.Pp;
+                lblImpAB2.Content = consulta.Ab;
+                lblImpNV2.Content = consulta.Nv;
+                lblImpPeso2.Content = consulta.Peso;
+                lblImpTalla2.Content = consulta.Talla;
+                lblImpPA2.Content = consulta.Pa;
+                txtFamiliares2.Text = consulta.Familiares;
+                txtPersonales2.Text = consulta.Personales;
+                txtHallazgos2.Text = consulta.HallazgosFisicos;
+                txtDiagnostico2.Text = consulta.Diagnostico;
+                txtPlan2.Text = consulta.PlanTerapeutico;
+                lblImpImc2.Content = consulta.Imc;
+
+            }
+        }
+        private void btnImprimir2_Click(object sender, RoutedEventArgs e)
+        {
+
+            string nombreArchivo = DateTime.Now.ToString("yyyyMMddHHmmss") + "_";
+
+            string nombre = nombreArchivo + Guid.NewGuid().ToString("n").Substring(0, 8) + ".xps";
+            Print_WPF_Preview(areaImpresion2, nombre);
+        }
+        private void btnImprimir2_GotFocus(object sender, RoutedEventArgs e)
+        {
+            scroll2.ScrollToHome();
         }
     }
 }

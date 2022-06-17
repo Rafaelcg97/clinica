@@ -1,5 +1,6 @@
 ﻿using clinica.clases;
 using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
@@ -13,39 +14,95 @@ namespace clinica
 {
     public partial class NuevaConsulta : Page
     {
+        int idConsulta = 0;
 
-        public NuevaConsulta()
+        public NuevaConsulta(consulta consulta)
         {
             InitializeComponent();
+            //para estandarizar formatos de fecha
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
             Thread.CurrentThread.CurrentCulture = ci;
+            //
+            idConsulta = consulta.IdConsulta;
             cmbMF.Items.Add("Si");
             cmbMF.Items.Add("No");
 
-        }
+            //cargar datos de consulta en caso de que sea una actualización 
+            if (idConsulta != 0)
+            {
+                lblId.Content = consulta.Id;
+                lblNombre.Content = consulta.Nombre;
+                txtPersonales.AppendText(consulta.Personales);
+                txtFamiliares.AppendText(consulta.Familiares);
+                dtpFUR.SelectedDate = consulta.Fur;
+                txtG.Text = consulta.G;
+                txtPV.Text = consulta.Pv;
+                txtPC.Text = consulta.Pc;
+                txtPP.Text = consulta.Pp;
+                txtAB.Text = consulta.Ab;
+                txtNV.Text = consulta.Nv;
+                txtPA.Text = consulta.Pa;
+                txtTalla.Text = consulta.Talla.ToString();
+                txtPeso.Text = consulta.Peso.ToString();
+                txtResultadosFisicos.AppendText(consulta.HallazgosFisicos);
+                txtFPP.Text = consulta.Fpp.ToString();
+                txtEG.Text = consulta.Eg.ToString();
+                txtAU.Text = consulta.Au;
+                txtPresent.Text = consulta.Present;
+                txtFCF.Text = consulta.Fcf;
+                cmbMF.SelectedItem = consulta.Mf;
+                txtRH.Text = consulta.Rh;
+                txtHB.Text = consulta.Hb;
+                txtVIH.Text = consulta.Vih;
+                txtVDLR.Text = consulta.Vdlr;
+                txtEGO.Text = consulta.Ego;
+                txtURO.Text = consulta.Uro;
+                txtGluc.Text = consulta.Glc;
+                txtOS.Text = consulta.Os;
+                txtUSG.Text = consulta.Usg;
+                txtMotivo.AppendText(consulta.MotivoConsulta);
+                txtHistoriaClinica.AppendText(consulta.HistoriaClinica);
+                txtDiagnostico.AppendText(consulta.Diagnostico);
+                txtPlanTerapeutico.AppendText(consulta.PlanTerapeutico);
+                chkTipoConsulta.IsChecked = consulta.TipoConsulta;
 
+            }
+
+        }
         private void btnAtras_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-
         private void btnBuscarPaciente_Click(object sender, RoutedEventArgs e)
         {
             popUpPaciente.IsOpen = true;
-            string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes]";
-
+            lstPacientes.Items.Clear();
             using (SqlConnection cn = conexioSQL.Clinica())
             {
                 try
                 {
-                    SqlCommand cm = new SqlCommand(sql, cn);
-                    SqlDataReader dr = cm.ExecuteReader();
-                    while (dr.Read())
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_pacientes", cn))
                     {
-                        lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", "");
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            lstPacientes.Items.Add(
+                                new paciente(
+                                    Convert.ToInt32(dt.Rows[i][0]),
+                                    Convert.ToString(dt.Rows[i][2]),
+                                    Convert.ToString(dt.Rows[i][3]),
+                                    Convert.ToDateTime(dt.Rows[i][4]),
+                                    Convert.ToString(dt.Rows[i][5]),
+                                    Convert.ToString(dt.Rows[i][6])
+                                    )
+                                );
+                        }
                     }
-                    dr.Close();
                 }
                 catch (Exception ex)
                 {
@@ -53,56 +110,41 @@ namespace clinica
                 }
             }
         }
-
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             lstPacientes.Items.Clear();
-            if (string.IsNullOrEmpty(txtBuscar.Text))
+            using (SqlConnection cn = conexioSQL.Clinica())
             {
-                string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes]";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                try
                 {
-                    try
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_pacientes", cn))
                     {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", txtBuscar.Text);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                            lstPacientes.Items.Add(
+                                new paciente(
+                                    Convert.ToInt32(dt.Rows[i][0]),
+                                    Convert.ToString(dt.Rows[i][2]),
+                                    Convert.ToString(dt.Rows[i][3]),
+                                    Convert.ToDateTime(dt.Rows[i][4]),
+                                    Convert.ToString(dt.Rows[i][5]),
+                                    Convert.ToString(dt.Rows[i][6])
+                                    )
+                                );
                         }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-            }
-            else
-            {
-                string sql = "SELECT [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] WHERE nombrePaciente LIKE'%" + txtBuscar.Text + "%'";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
-                        }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
         private void btnSeleccionarPaciente_Click(object sender, RoutedEventArgs e)
         {
             if (lstPacientes.SelectedIndex > -1)
@@ -115,21 +157,27 @@ namespace clinica
                 txtblMotivo.Text = "----";
                 txtblPlan.Text = "----";
 
-                string sql = "SELECT TOP 1 motivoConsulta, diagnosticoConsulta, planTerapeuticoConsulta FROM consultas WHERE idPaciente='"+pacienteSeleccionado.Id+"' ORDER BY idConsulta DESC;";
-
                 using (SqlConnection cn = conexioSQL.Clinica())
                 {
                     try
                     {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
+                        using (SqlCommand cmd = new SqlCommand("sp_ultima_consulta", cn))
                         {
-                            txtblDiagnostico.Text= dr["diagnosticoConsulta"].ToString();
-                            txtblMotivo.Text= dr["motivoConsulta"].ToString();
-                            txtblPlan.Text= dr["planTerapeuticoConsulta"].ToString();
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@idPaciente", pacienteSeleccionado.Id);
+                            DataTable dt = new DataTable();
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                txtPersonales.AppendText(dt.Rows[0][0].ToString());
+                                txtFamiliares.AppendText(dt.Rows[0][1].ToString());
+                                txtblMotivo.Text = dt.Rows[0][2].ToString();
+                                txtblDiagnostico.Text = dt.Rows[0][3].ToString();
+                                txtblPlan.Text = dt.Rows[0][4].ToString();
+                            }
                         }
-                        dr.Close();
                     }
                     catch (Exception ex)
                     {
@@ -139,7 +187,6 @@ namespace clinica
                 popUpPaciente.IsOpen = false;
             }
         }
-
         private void soloNumerosDecimales(object sender, KeyEventArgs e)
         {
             TextBox txt = (TextBox)sender;
@@ -159,97 +206,193 @@ namespace clinica
             }
 
         }
-
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (lblId.Content.ToString() != "----")
+            //formateo de datos a ingresar
+            string personales = new TextRange(txtPersonales.Document.ContentStart, txtPersonales.Document.ContentEnd).Text;
+            string familiares = new TextRange(txtFamiliares.Document.ContentStart, txtFamiliares.Document.ContentEnd).Text;
+            string fur = Convert.ToDateTime(dtpFUR.SelectedDate).ToString();
+            string g = Convert.ToString(txtG.Text);
+            string pv = Convert.ToString(txtPV.Text);
+            string pc = Convert.ToString(txtPC.Text);
+            string pp = Convert.ToString(txtPP.Text);
+            string ab = Convert.ToString(txtAB.Text);
+            string nv = Convert.ToString(txtNV.Text);
+            string pa = Convert.ToString(txtPA.Text);
+            float talla = Convert.ToSingle(txtTalla.Text == "" ? "0" : txtTalla.Text);
+            float peso = Convert.ToSingle(txtPeso.Text == "" ? "0" : txtPeso.Text);
+            string hallazgosFisicos = new TextRange(txtResultadosFisicos.Document.ContentStart, txtResultadosFisicos.Document.ContentEnd).Text;
+            string fpp = Convert.ToString(txtFPP.Text);
+            string eg = Convert.ToString(txtEG.Text);
+            string au = Convert.ToString(txtAU.Text);
+            string present = Convert.ToString(txtPresent.Text);
+            string fcf = Convert.ToString(txtFCF.Text);
+            string mf = cmbMF.SelectedIndex != -1 ? cmbMF.SelectedValue.ToString() : "";
+            string rh = Convert.ToString(txtRH.Text == "" ? "-" : txtRH.Text);
+            string hb = Convert.ToString(txtHB.Text);
+            string vih = Convert.ToString(txtVIH.Text);
+            string vdlr = Convert.ToString(txtVDLR.Text);
+            string ego = Convert.ToString(txtEGO.Text);
+            string uro = Convert.ToString(txtURO.Text);
+            string glc = Convert.ToString(txtGluc.Text);
+            string os = Convert.ToString(txtOS.Text);
+            string usg = Convert.ToString(txtUSG.Text);
+            string motivo = new TextRange(txtMotivo.Document.ContentStart, txtMotivo.Document.ContentEnd).Text;
+            string historiaClinica = new TextRange(txtHistoriaClinica.Document.ContentStart, txtHistoriaClinica.Document.ContentEnd).Text;
+            string diagnostico = new TextRange(txtDiagnostico.Document.ContentStart, txtDiagnostico.Document.ContentEnd).Text;
+            string plan = new TextRange(txtPlanTerapeutico.Document.ContentStart, txtPlanTerapeutico.Document.ContentEnd).Text;
+            bool tipo = (bool)chkTipoConsulta.IsChecked ? true : false;
+
+            //si el id de la consulta es cero es una nueva consulta si no es una actualizacion (este parametro se recibe en el costructor)
+            if (idConsulta == 0)
             {
-                string motivo = new TextRange(txtMotivo.Document.ContentStart, txtMotivo.Document.ContentEnd).Text;
-                string diagnostico = new TextRange(txtDiagnostico.Document.ContentStart, txtDiagnostico.Document.ContentEnd).Text;
-                string plan = new TextRange(txtPlanTerapeutico.Document.ContentStart, txtPlanTerapeutico.Document.ContentEnd).Text;
-                string examenes = new TextRange(txtExamenes.Document.ContentStart, txtExamenes.Document.ContentEnd).Text;
-                bool tipo = true;
-                if ((bool)chkTipoConsulta.IsChecked)
+                //Cuando el registro es nuevo se exige haber seleccionado un paciente 
+                if (lblId.Content.ToString() != "----")
                 {
-                    tipo = false; //es obstetrica
-                }
-                string sql = "INSERT INTO consultas(fechaConsulta, idPaciente, tipoConsulta, motivoConsulta, diagnosticoConsulta, planTerapeuticoConsulta, examenesFisicosConsulta) " +
-                    "VALUES('"+DateTime.Now.ToString("yyyy-MM-dd")+"','"+lblId.Content+"','"+ tipo +"', '"+ motivo+"','"+diagnostico+"','"+plan+"','"+examenes+ "')SELECT SCOPE_IDENTITY()";
-                int idSolicitud = 0;
-                using (SqlConnection cn = conexioSQL.Clinica())
-                {
-                    try
-                    {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        dr.Read();
-                        idSolicitud = Convert.ToInt32(dr[0]);
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    //numero de registro ingresado
+                    int registroId = 0;
 
-                    try
-                    {
-                        string personales = new TextRange(txtPersonales.Document.ContentStart, txtPersonales.Document.ContentEnd).Text;
-                        string familiares = new TextRange(txtFamiliares.Document.ContentStart, txtFamiliares.Document.ContentEnd).Text;
-                        string fisicos = new TextRange(txtResultadosFisicos.Document.ContentStart, txtResultadosFisicos.Document.ContentEnd).Text;
-                        string mf = "";
-                        if (cmbMF.SelectedIndex > -1)
-                        {
-                            mf = cmbMF.SelectedItem.ToString();
-                        }
-                        string sql2 = "INSERT INTO antecedentes(idPaciente, idConsultas, personalesAntecedentes, familiaresAntecedentes, gAntecedentes, pvAntecedentes, pcAntecendentes, ppAntecendentes, abAntecendentes, vAntecendentes, pAntecendentes, furAntecedentes, fppAntecedentes, TallaAntecedentes, PesoAntecedentes)" +
-                                        " VALUES('" + lblId.Content + "','" + idSolicitud + "','" + personales + "','" + familiares + "','" + txtG.Text + "','" + txtPV.Text + "'," +
-                                        "'" + txtPC.Text + "','" + txtPP.Text + "','" + txtAB.Text + "','" + txtV.Text + "','" + txtP.Text + "','" + Convert.ToDateTime(dtpFUR.SelectedDate).ToString("yyyy-MM-dd") + 
-                                        "','" + txtFPP.Text + "', '" + txtTalla.Text + "', '" + txtPeso.Text + "');";
-
-                        if ((bool)chkTipoConsulta.IsChecked)
-                        {
-                            sql2 = "INSERT INTO [dbo].[antecedentes] ([idPaciente] ,[idConsultas],[personalesAntecedentes],[familiaresAntecedentes],[gAntecedentes]," +
-                                "[pvAntecedentes],[pcAntecendentes],[ppAntecendentes],[abAntecendentes],[vAntecendentes],[pAntecendentes],[furAntecedentes],[fppAntecedentes]," +
-                                "[tallaAntecedentes],[pesoAntecedentes],[hallazgosAntecedentes],[egAntecedentes],[auAntecedentes],[presentAntecedentes],[fcfAntecedentes]," +
-                                "[mfAntecedentes],[rhAntecedentes],[hbAntecedentes],[vihAntecedentes],[vdlrAntecedentes],[egoAntecedentes],[uroAntecedentes],[glcAntecedentes]," +
-                                "[osAntecedentes],[usgAntecedentes]) VALUES('"+lblId.Content +"','"+idSolicitud+"','"+personales +"','"+familiares+"','"+txtG.Text+"','"+txtPV.Text+"'," +
-                                "'"+txtPC.Text+"','"+txtPP.Text+"','"+txtAB.Text+"','"+txtV.Text+"','"+txtP.Text+"','"+ Convert.ToDateTime(dtpFUR.SelectedDate).ToString("yyyy-MM-dd") +"','"+txtFPP.Text+"'," +
-                                "'"+txtTalla.Text+"','"+txtPeso.Text+"', '"+fisicos+"', '"+txtEG.Text+"', '"+txtAU.Text+"','"+txtPresent.Text+"','"+txtFCF.Text+"','"+mf+"','"+
-                                txtRH.Text+"','"+txtHB.Text+"','"+txtVIH.Text+"','"+txtVDLR.Text+"','"+txtEGO.Text+"','"+txtURO.Text+"','"+txtGluc.Text+"','"+txtOS.Text+"','"+txtUSG.Text+"')";
-                        }
-                        
-                        SqlCommand cm = new SqlCommand(sql2, cn);
-                        cm.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-
-                    if (Convert.ToDateTime(dtpFecha.SelectedDate).ToString("yyyy-MM-dd") != "0001-01-01")
+                    //ingreso de datos
+                    using (SqlConnection cn = conexioSQL.Clinica())
                     {
                         try
                         {
-                            string sql3 = "INSERT INTO avisos(idConsulta, fechaAviso, textAviso) VALUES('"+idSolicitud+"','"+Convert.ToDateTime(dtpFecha.SelectedDate).ToString("yyyy-MM-dd")+"','"+txtAviso.Text+"')";
-                            SqlCommand cm = new SqlCommand(sql3, cn);
-                            cm.ExecuteNonQuery();
+                            using (SqlCommand cmd = new SqlCommand("sp_insertar_consulta", cn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+
+                                cmd.Parameters.AddWithValue("@tipoConsulta", tipo);
+                                cmd.Parameters.AddWithValue("@idPaciente", lblId.Content);
+                                cmd.Parameters.AddWithValue("@personales", personales);
+                                cmd.Parameters.AddWithValue("@familiares", familiares);
+                                cmd.Parameters.AddWithValue("@fur", fur);
+                                cmd.Parameters.AddWithValue("@g", g);
+                                cmd.Parameters.AddWithValue("@pv", pv);
+                                cmd.Parameters.AddWithValue("@pc", pc);
+                                cmd.Parameters.AddWithValue("@pp", pp);
+                                cmd.Parameters.AddWithValue("@ab", ab);
+                                cmd.Parameters.AddWithValue("@nv", nv);
+                                cmd.Parameters.AddWithValue("@pa", pa);
+                                cmd.Parameters.AddWithValue("@talla", talla);
+                                cmd.Parameters.AddWithValue("@peso", peso);
+                                cmd.Parameters.AddWithValue("@hallazgosFisicos", hallazgosFisicos);
+                                cmd.Parameters.AddWithValue("@fpp", fpp);
+                                cmd.Parameters.AddWithValue("@eg", eg);
+                                cmd.Parameters.AddWithValue("@au", au);
+                                cmd.Parameters.AddWithValue("@present", present);
+                                cmd.Parameters.AddWithValue("@fcf", fcf);
+                                cmd.Parameters.AddWithValue("@mf", mf);
+                                cmd.Parameters.AddWithValue("@rh", rh);
+                                cmd.Parameters.AddWithValue("@hb", hb);
+                                cmd.Parameters.AddWithValue("@vih", vih);
+                                cmd.Parameters.AddWithValue("@vdlr", vdlr);
+                                cmd.Parameters.AddWithValue("@ego", ego);
+                                cmd.Parameters.AddWithValue("@uro", uro);
+                                cmd.Parameters.AddWithValue("@glc", glc);
+                                cmd.Parameters.AddWithValue("@os", os);
+                                cmd.Parameters.AddWithValue("@usg", usg);
+                                cmd.Parameters.AddWithValue("@motivoConsulta", motivo);
+                                cmd.Parameters.AddWithValue("@historiaClinica", historiaClinica);
+                                cmd.Parameters.AddWithValue("@diagnostico", diagnostico);
+                                cmd.Parameters.AddWithValue("@planTerapeutico", plan);
+
+                                DataTable dt = new DataTable();
+                                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                                da.Fill(dt);
+                                registroId = Convert.ToInt32(dt.Rows[0][0]);
+                            }
                         }
                         catch (Exception ex)
                         {
                             MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-                    }
 
+                        if (Convert.ToDateTime(dtpFecha.SelectedDate).ToString() != "0001-01-01")
+                        {
+                            try
+                            {
+                                using (SqlCommand cmd = new SqlCommand("sp_crear_aviso", cn))
+                                {
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Parameters.AddWithValue("@idConsulta", registroId);
+                                    cmd.Parameters.AddWithValue("@fechaAviso", Convert.ToDateTime(dtpFecha.SelectedDate).ToString("yyyy-MM-dd"));
+                                    cmd.Parameters.AddWithValue("@textAviso", txtAviso.Text);
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+
+                    }
+                    MessageBox.Show("Consulta Guardada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    NavigationService.Navigate(new Index());
                 }
-                MessageBox.Show("Consulta Guardada", "Aviso",MessageBoxButton.OK,MessageBoxImage.Information);
-                NavigationService.Navigate(new Index());
+                else
+                {
+                    MessageBox.Show("Seleccione un paciente");
+                }
             }
             else
             {
-                MessageBox.Show("Seleccione un paciente");
+                using (SqlConnection cn = conexioSQL.Clinica())
+                {
+                    try
+                    {
+                        using (SqlCommand cmd = new SqlCommand("sp_actualizar_consulta", cn))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@idConsulta", idConsulta);
+                            cmd.Parameters.AddWithValue("@tipoConsulta", tipo);
+                            cmd.Parameters.AddWithValue("@idPaciente", lblId.Content);
+                            cmd.Parameters.AddWithValue("@personales", personales);
+                            cmd.Parameters.AddWithValue("@familiares", familiares);
+                            cmd.Parameters.AddWithValue("@fur", fur);
+                            cmd.Parameters.AddWithValue("@g", g);
+                            cmd.Parameters.AddWithValue("@pv", pv);
+                            cmd.Parameters.AddWithValue("@pc", pc);
+                            cmd.Parameters.AddWithValue("@pp", pp);
+                            cmd.Parameters.AddWithValue("@ab", ab);
+                            cmd.Parameters.AddWithValue("@nv", nv);
+                            cmd.Parameters.AddWithValue("@pa", pa);
+                            cmd.Parameters.AddWithValue("@talla", talla);
+                            cmd.Parameters.AddWithValue("@peso", peso);
+                            cmd.Parameters.AddWithValue("@hallazgosFisicos", hallazgosFisicos);
+                            cmd.Parameters.AddWithValue("@fpp", fpp);
+                            cmd.Parameters.AddWithValue("@eg", eg);
+                            cmd.Parameters.AddWithValue("@au", au);
+                            cmd.Parameters.AddWithValue("@present", present);
+                            cmd.Parameters.AddWithValue("@fcf", fcf);
+                            cmd.Parameters.AddWithValue("@mf", mf);
+                            cmd.Parameters.AddWithValue("@rh", rh);
+                            cmd.Parameters.AddWithValue("@hb", hb);
+                            cmd.Parameters.AddWithValue("@vih", vih);
+                            cmd.Parameters.AddWithValue("@vdlr", vdlr);
+                            cmd.Parameters.AddWithValue("@ego", ego);
+                            cmd.Parameters.AddWithValue("@uro", uro);
+                            cmd.Parameters.AddWithValue("@glc", glc);
+                            cmd.Parameters.AddWithValue("@os", os);
+                            cmd.Parameters.AddWithValue("@usg", usg);
+                            cmd.Parameters.AddWithValue("@motivoConsulta", motivo);
+                            cmd.Parameters.AddWithValue("@historiaClinica", historiaClinica);
+                            cmd.Parameters.AddWithValue("@diagnostico", diagnostico);
+                            cmd.Parameters.AddWithValue("@planTerapeutico", plan);
+
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                MessageBox.Show("Consulta Actualizada", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
+                NavigationService.Navigate(new Index());
             }
         }
-
         private string generarImc()
         {
             string imc = "---";
@@ -262,12 +405,10 @@ namespace clinica
 
             return imc;
         }
-
         private void txtTalla_TextChanged(object sender, TextChangedEventArgs e)
         {
             txtblImc.Text = generarImc();
         }
-
         private void dtpFUR_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             int dia = (Convert.ToDateTime(dtpFUR.SelectedDate).AddDays(7)).Day;
@@ -277,12 +418,10 @@ namespace clinica
             txtFPP.Text = anio.ToString("0000")+ "-" + mes.ToString("00") + "-" + dia.ToString("00");
 
         }
-
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             grbObste.IsEnabled = true;
         }
-
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             grbObste.IsEnabled = false;

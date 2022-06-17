@@ -215,6 +215,7 @@
                                 Width="90"
                                 FontSize="12"
                                 FontWeight="Normal"
+                                MaxLength="10"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
                             <StackPanel
@@ -232,6 +233,7 @@
                                 x:Name="txtPV"
                                 Width="90"
                                 FontSize="12"
+                                    MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
@@ -250,6 +252,7 @@
                                 x:Name="txtPC"
                                 Width="90"
                                 FontSize="12"
+                                    MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
@@ -268,6 +271,7 @@
                                 x:Name="txtPP"
                                 Width="90"
                                 FontSize="12"
+                                    MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
@@ -286,6 +290,7 @@
                                 x:Name="txtAB"
                                 Width="90"
                                 FontSize="12"
+                                    MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
@@ -301,9 +306,10 @@
                                 VerticalContentAlignment="Center"
                                 Content="NV:"/>
                                 <TextBox 
-                                x:Name="txtV"
+                                x:Name="txtNV"
                                 Width="90"
                                 FontSize="12"
+                                    MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"/>
                             </StackPanel>
@@ -332,7 +338,7 @@
                                 VerticalContentAlignment="Center"
                                 Content="P/A:"/>
                             <TextBox
-                                x:Name="txtP"
+                                x:Name="txtPA"
                                 Width="100"
                                 FontSize="12"
                                 FontWeight="Normal" MaxLength="9"/>
@@ -353,6 +359,7 @@
                                 x:Name="txtTalla"
                                 Width="100"
                                 FontSize="12"
+                                MaxLength="10"
                                 FontWeight="Normal"
                                 KeyDown="soloNumerosDecimales"
                                 TextChanged="txtTalla_TextChanged"/>
@@ -373,6 +380,7 @@
                                 x:Name="txtPeso"
                                 Width="100"
                                 FontSize="12"
+                                MaxLength="10"
                                 FontWeight="Normal" 
                                 TextChanged="txtTalla_TextChanged"/>
                         </StackPanel>
@@ -392,6 +400,7 @@
                                 x:Name="txtblImc"
                                 Width="100"
                                 FontSize="12"
+                                MaxLength="10"
                                 FontWeight="Normal"
                                 IsEnabled="False"/>
                         </StackPanel>
@@ -793,7 +802,7 @@
                             FontWeight="DemiBold"
                             Content="Historia Clinica:"/>
                         <RichTextBox
-                            x:Name="txtExamenes"
+                            x:Name="txtHistoriaClinica"
                             Height="135"
                             FontSize="15"
                             FontWeight="Normal"

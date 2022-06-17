@@ -1,5 +1,6 @@
 ﻿using clinica.clases;
 using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
@@ -14,22 +15,37 @@ namespace clinica
         public NuevoPaciente()
         {
             InitializeComponent();
+            //Para estandarizar formatos de fecha
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
             Thread.CurrentThread.CurrentCulture = ci;
-            string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] ORDER BY IdPaciente DESC";
 
+            //para mostrar datos preliminares en listview
             using (SqlConnection cn = conexioSQL.Clinica())
             {
                 try
                 {
-                    SqlCommand cm = new SqlCommand(sql, cn);
-                    SqlDataReader dr = cm.ExecuteReader();
-                    while (dr.Read())
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_pacientes", cn))
                     {
-                        lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]),dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", "");
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            lstPacientes.Items.Add(
+                                new paciente(
+                                    Convert.ToInt32(dt.Rows[i][0]),
+                                    Convert.ToString(dt.Rows[i][2]),
+                                    Convert.ToString(dt.Rows[i][3]),
+                                    Convert.ToDateTime(dt.Rows[i][4]),
+                                    Convert.ToString(dt.Rows[i][5]),
+                                    Convert.ToString(dt.Rows[i][6])
+                                    )
+                                );
+                        }
                     }
-                    dr.Close();
                 }
                 catch (Exception ex)
                 {
@@ -37,12 +53,10 @@ namespace clinica
                 }
             }
         }
-
         private void btnAtras_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.GoBack();
         }
-
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(txtNombre.Text) || !mskDocumento.IsMaskCompleted || !mskTelefono.IsMaskCompleted || Convert.ToDateTime(dpFecha.SelectedDate).ToString("yyyy-MM-dd")=="0001-01-01")
@@ -51,19 +65,38 @@ namespace clinica
             }
             else
             {
-                string sql = "INSERT INTO pacientes(fechaRegistroPaciente, nombrePaciente, documentoPaciente, fechaNacimientoPaciente, telefonoPaciente, correoPaciente) " +
-                             "VALUES('"+DateTime.Now.ToString("yyyy-MM-dd")+"', '"+txtNombre.Text+"','"+mskDocumento.Text+"','"+Convert.ToDateTime(dpFecha.SelectedDate).ToString("yyyy-MM-dd")+"','"+mskTelefono.Text+"','"+txtCorreo.Text+"')";
-                if (txtId.Text != "0")
-                {
-                    sql = "UPDATE pacientes SET nombrePaciente='" + txtNombre.Text + "', documentoPaciente='" + mskDocumento.Text + "', fechaNacimientoPaciente='" + Convert.ToDateTime(dpFecha.SelectedDate).ToString("yyyy-MM-dd") + "', telefonoPaciente='" + mskTelefono.Text + "', correoPaciente='" + txtCorreo.Text + "' WHERE idPaciente='"+txtId.Text+"'";
-                }
                 using (SqlConnection cn = conexioSQL.Clinica())
                 {
                     try
                     {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        cm.ExecuteNonQuery();
-                        MessageBox.Show("Paciente ingresado");
+                        if (txtId.Text == "0")
+                        {
+                            using (SqlCommand cmd = new SqlCommand("sp_insertar_paciente", cn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@nombrePaciente", Convert.ToString(txtNombre.Text));
+                                cmd.Parameters.AddWithValue("@documentoPaciente", mskDocumento.Text);
+                                cmd.Parameters.AddWithValue("@fechaNacimientoPaciente", Convert.ToDateTime(dpFecha.SelectedDate));
+                                cmd.Parameters.AddWithValue("@telefonoPaciente", mskTelefono.Text);
+                                cmd.Parameters.AddWithValue("@correoPaciente", txtCorreo.Text);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            using (SqlCommand cmd = new SqlCommand("sp_actualizar_paciente", cn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.AddWithValue("@idPaciente",Convert.ToInt32(txtId.Text));
+                                cmd.Parameters.AddWithValue("@nombrePaciente", Convert.ToString(txtNombre.Text));
+                                cmd.Parameters.AddWithValue("@documentoPaciente", mskDocumento.Text);
+                                cmd.Parameters.AddWithValue("@fechaNacimientoPaciente", Convert.ToDateTime(dpFecha.SelectedDate));
+                                cmd.Parameters.AddWithValue("@telefonoPaciente", mskTelefono.Text);
+                                cmd.Parameters.AddWithValue("@correoPaciente", txtCorreo.Text);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -74,7 +107,6 @@ namespace clinica
                 NavigationService.Navigate(new Index());
             }
         }
-
         private void lstPacientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lstPacientes.SelectedIndex > -1)
@@ -88,7 +120,6 @@ namespace clinica
                 dpFecha.SelectedDate= Convert.ToDateTime(itemSeleccionado.FechaNacimiento);
             }
         }
-
         private void btnLimpiar_Click(object sender, RoutedEventArgs e)
         {
             txtId.Text = "0";
@@ -98,56 +129,41 @@ namespace clinica
             txtCorreo.Clear();
 
         }
-
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             lstPacientes.Items.Clear();
-            if (string.IsNullOrEmpty(txtBuscar.Text))
+            using (SqlConnection cn = conexioSQL.Clinica())
             {
-                string sql = "SELECT TOP 100 [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] ORDER BY IdPaciente DESC";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                try
                 {
-                    try
+                    using (SqlCommand cmd = new SqlCommand("sp_consultar_pacientes", cn))
                     {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombrePaciente", txtBuscar.Text);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        for (int i = 0; i < dt.Rows.Count; i++)
                         {
-                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
+                            lstPacientes.Items.Add(
+                                new paciente(
+                                    Convert.ToInt32(dt.Rows[i][0]),
+                                    Convert.ToString(dt.Rows[i][2]),
+                                    Convert.ToString(dt.Rows[i][3]),
+                                    Convert.ToDateTime(dt.Rows[i][4]),
+                                    Convert.ToString(dt.Rows[i][5]),
+                                    Convert.ToString(dt.Rows[i][6])
+                                    )
+                                );
                         }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-            }
-            else
-            {
-                string sql = "SELECT [idPaciente],[fechaRegistroPaciente],[nombrePaciente],[documentoPaciente],[fechaNacimientoPaciente],[telefonoPaciente],[correoPaciente] FROM [dbo].[pacientes] WHERE nombrePaciente LIKE'%"+txtBuscar.Text+"%'";
-
-                using (SqlConnection cn = conexioSQL.Clinica())
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        SqlCommand cm = new SqlCommand(sql, cn);
-                        SqlDataReader dr = cm.ExecuteReader();
-                        while (dr.Read())
-                        {
-                            lstPacientes.Items.Add(new paciente(Convert.ToInt32(dr["idPaciente"]), dr["nombrePaciente"].ToString(), dr["documentoPaciente"].ToString(), Convert.ToDateTime(dr["fechaNacimientoPaciente"]).ToString("yyyy-MM-dd"), dr["telefonoPaciente"].ToString(), dr["correoPaciente"].ToString()));
-                        }
-                        dr.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    MessageBox.Show(ex.Message.ToString(), "Ha ocurrido un error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
         private void dpFecha_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             DateTime nacimiento = Convert.ToDateTime(dpFecha.SelectedDate); //Fecha de nacimiento

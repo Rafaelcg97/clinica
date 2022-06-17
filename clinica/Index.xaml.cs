@@ -129,7 +129,7 @@ namespace clinica
 
         private void btnNuevaConsulta_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new NuevaConsulta());
+            NavigationService.Navigate(new NuevaConsulta(new consulta()));
         }
 
         private void btnRevisarHistorial_Click(object sender, RoutedEventArgs e)
