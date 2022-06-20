@@ -176,6 +176,12 @@ namespace clinica
                                 txtblMotivo.Text = dt.Rows[0][2].ToString();
                                 txtblDiagnostico.Text = dt.Rows[0][3].ToString();
                                 txtblPlan.Text = dt.Rows[0][4].ToString();
+                                txtG.Text= dt.Rows[0][5].ToString();
+                                txtPV.Text= dt.Rows[0][6].ToString();
+                                txtPC.Text= dt.Rows[0][7].ToString();
+                                txtPP.Text= dt.Rows[0][8].ToString();
+                                txtAB.Text= dt.Rows[0][9].ToString();
+                                txtNV.Text= dt.Rows[0][10].ToString();
                             }
                         }
                     }
